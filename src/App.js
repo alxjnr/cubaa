@@ -97,6 +97,38 @@ export default function App() {
       }
     });
 
+    socket.on("cardToPlayerTwo", (card) => {
+      setPlayerTwoHand((current) => {
+        return [...current, card];
+      });
+    });
+
+    socket.on("playerOneLostTile", (tileIndex) => {
+      setPlayerOneTriangle((prev) => {
+        const updatedTriangle = [...prev];
+        console.log(updatedTriangle[tileIndex]);
+        updatedTriangle[tileIndex] = false;
+        return updatedTriangle;
+      });
+    });
+
+    socket.on("cardToPlayerOne", (card) => {
+      setPlayerOneHand((current) => {
+        return [...current, card];
+      });
+    });
+
+    socket.on("playerTwoLostCard", (cardSelected) => {
+      setPlayerTwoHand((current) => {
+        const currentHand = [...current];
+        const selectedIndex = currentHand.findIndex(
+          (card) => card.code === cardSelected.code
+        );
+        currentHand.splice(selectedIndex, 1);
+        return currentHand;
+      });
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -107,6 +139,9 @@ export default function App() {
       socket.off("assignPlayer");
       socket.off("playerReady");
       socket.off("setTriangle");
+      socket.off("cardToPlayerTwo");
+      socket.off("playerOneLostTile");
+      socket.off("cardToPlayerOne");
     };
   }, []);
 

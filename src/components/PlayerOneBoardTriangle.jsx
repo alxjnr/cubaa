@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { playerOneTriangleContext } from "../contexts/playerOneTriangle";
 import { thisUserContext } from "../contexts/thisUser";
 import { selectedCardContext } from "../contexts/selectedCard";
+import { socket } from "../socket";
 
 export const PlayerOneBoardTriangle = () => {
   const { playerOneTriangle } = useContext(playerOneTriangleContext);
@@ -11,7 +12,7 @@ export const PlayerOneBoardTriangle = () => {
     new Array(playerOneTriangle.length).fill(false)
   );
 
-  const handleBattle = (selectedCard, opposingCard) => {
+  const handleBattle = (selectedCard, opposingCard, tileIndex) => {
     let selectedCardVal = selectedCard.code[0];
     let opposingCardVal = opposingCard.code[0];
 
@@ -37,10 +38,13 @@ export const PlayerOneBoardTriangle = () => {
 
     if (selectedCardVal > opposingCardVal) {
       console.log("card won");
+      socket.emit("cardToPlayerTwo", opposingCard);
+      socket.emit("playerOneLostTile", tileIndex);
     } else if (selectedCardVal === opposingCardVal) {
       console.log("same cards");
     } else {
-      console.log("card lost");
+      socket.emit("cardToPlayerOne", selectedCard);
+      socket.emit("playerTwoLostCard", selectedCard);
     }
   };
 
@@ -194,150 +198,280 @@ export const PlayerOneBoardTriangle = () => {
         <section>
           <section className="player-one-board-four">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[9].code}
-                alt={playerOneTriangle[9].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[9].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[9] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[9].code}
+                  alt={playerOneTriangle[9].code}
+                  src={
+                    revealed[9]
+                      ? playerOneTriangle[9].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[9] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[9], 9);
+                    }
+                  }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-three">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[7].code}
-                alt={playerOneTriangle[7].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[7].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[7] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[7].code}
+                  alt={playerOneTriangle[7].code}
+                  src={
+                    revealed[7]
+                      ? playerOneTriangle[7].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[7] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[7], 7);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[8].code}
-                alt={playerOneTriangle[8].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[8].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[8] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[8].code}
+                  alt={playerOneTriangle[8].code}
+                  src={
+                    revealed[8]
+                      ? playerOneTriangle[8].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[8] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[8], 8);
+                    }
+                  }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-two">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[4].code}
-                alt={playerOneTriangle[4].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[4].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[4] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[4].code}
+                  alt={playerOneTriangle[4].code}
+                  src={
+                    revealed[4]
+                      ? playerOneTriangle[4].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[4] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[4], 4);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[5].code}
-                alt={playerOneTriangle[5].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[5].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[5] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[5].code}
+                  alt={playerOneTriangle[5].code}
+                  src={
+                    revealed[5]
+                      ? playerOneTriangle[5].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[5] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[5], 5);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[6].code}
-                alt={playerOneTriangle[6].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[6].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[6] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[6].code}
+                  alt={playerOneTriangle[6].code}
+                  src={
+                    revealed[6]
+                      ? playerOneTriangle[6].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[6] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[6], 6);
+                    }
+                  }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-one">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[0].code}
-                alt={playerOneTriangle[0].code}
-                src={
-                  thisUser === "playerOne" || revealed[0]
-                    ? playerOneTriangle[0].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-                onClick={() => {
-                  if (selectedCard && thisUser === "playerTwo") {
-                    setRevealed((prev) => {
-                      const updatedRevealed = [...prev];
-                      updatedRevealed[0] = true;
-                      return updatedRevealed;
-                    });
-                    handleBattle(selectedCard, playerOneTriangle[0]);
+              {playerOneTriangle[0] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[0].code}
+                  alt={playerOneTriangle[0].code}
+                  src={
+                    revealed[0]
+                      ? playerOneTriangle[0].image
+                      : "/images/back-of-card.png"
                   }
-                }}
-              />
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[0] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[0], 0);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[1].code}
-                alt={playerOneTriangle[1].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[1].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[1] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[1].code}
+                  alt={playerOneTriangle[1].code}
+                  src={
+                    revealed[1]
+                      ? playerOneTriangle[1].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[1] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[1], 1);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[2].code}
-                alt={playerOneTriangle[2].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[2].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[2] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[2].code}
+                  alt={playerOneTriangle[2].code}
+                  src={
+                    revealed[2]
+                      ? playerOneTriangle[2].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[2] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[2], 2);
+                    }
+                  }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerOneTriangle[3].code}
-                alt={playerOneTriangle[3].code}
-                src={
-                  thisUser === "playerOne"
-                    ? playerOneTriangle[3].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerOneTriangle[3] === false ? (
+                <section></section>
+              ) : (
+                <img
+                  className="card-on-board"
+                  key={playerOneTriangle[3].code}
+                  alt={playerOneTriangle[3].code}
+                  src={
+                    revealed[3]
+                      ? playerOneTriangle[3].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                  onClick={() => {
+                    if (selectedCard && thisUser === "playerTwo") {
+                      setRevealed((prev) => {
+                        const updatedRevealed = [...prev];
+                        updatedRevealed[3] = true;
+                        return updatedRevealed;
+                      });
+                      handleBattle(selectedCard, playerOneTriangle[3], 3);
+                    }
+                  }}
+                />
+              )}
             </section>
           </section>
         </section>
