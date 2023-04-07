@@ -2,26 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { playerOneHandContext } from "../contexts/playerOneHand";
 import { playerTwoHandContext } from "../contexts/playerTwoHand";
 import { thisUserContext } from "../contexts/thisUser";
+import { playersReadyContext } from "../contexts/playersReady";
 import { socket } from "../socket";
 import axios from "axios";
+import { GameBoard } from "./GameBoard";
 
-export const Game = () => {
+export const GamePrep = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
   const { playerTwoHand } = useContext(playerTwoHandContext);
+  const { playersReady } = useContext(playersReadyContext);
   const { thisUser } = useContext(thisUserContext);
   const [selectedCard, setSelectedCard] = useState({});
 
   const [isLoading, setIsLoading] = useState(true);
-  const [square1, setSquare1] = useState();
-  const [square2, setSquare2] = useState();
-  const [square3, setSquare3] = useState();
-  const [square4, setSquare4] = useState();
-  const [square5, setSquare5] = useState();
-  const [square6, setSquare6] = useState();
-  const [square7, setSquare7] = useState();
-  const [square8, setSquare8] = useState();
-  const [square9, setSquare9] = useState();
-  const [square10, setSquare10] = useState();
+  const [squaresArr, setSquaresArr] = useState([]);
 
   const drawToPlayer = (cards, player) => {
     socket.emit("drawCards", cards, player);
@@ -43,6 +37,10 @@ export const Game = () => {
       });
       modifyHand(newHand, "playerTwo");
     }
+  };
+
+  const playerReady = () => {
+    socket.emit("playerReady", thisUser);
   };
 
   useEffect(() => {
@@ -73,6 +71,8 @@ export const Game = () => {
     <section>
       {isLoading ? (
         <h2>loading...</h2>
+      ) : playersReady ? (
+        <GameBoard />
       ) : (
         <section>
           <section className="player-one-board">
@@ -80,20 +80,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square1) {
-                    setSquare1(selectedCard);
+                  if (!squaresArr[0]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[0] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square1 ? (
+                {!squaresArr[0] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square1.code}
-                    alt={square1.code}
-                    src={square1.image}
+                    key={squaresArr[0].code}
+                    alt={squaresArr[0].code}
+                    src={squaresArr[0].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -101,20 +105,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square2) {
-                    setSquare2(selectedCard);
+                  if (!squaresArr[1]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[1] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square2 ? (
+                {!squaresArr[1] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square2.code}
-                    alt={square2.code}
-                    src={square2.image}
+                    key={squaresArr[1].code}
+                    alt={squaresArr[1].code}
+                    src={squaresArr[1].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -122,20 +130,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square3) {
-                    setSquare3(selectedCard);
+                  if (!squaresArr[2]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[2] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square3 ? (
+                {!squaresArr[2] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square3.code}
-                    alt={square3.code}
-                    src={square3.image}
+                    key={squaresArr[2].code}
+                    alt={squaresArr[2].code}
+                    src={squaresArr[2].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -143,20 +155,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square4) {
-                    setSquare4(selectedCard);
+                  if (!squaresArr[3]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[3] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square4 ? (
+                {!squaresArr[3] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square4.code}
-                    alt={square4.code}
-                    src={square4.image}
+                    key={squaresArr[3].code}
+                    alt={squaresArr[3].code}
+                    src={squaresArr[3].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -166,20 +182,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square5) {
-                    setSquare5(selectedCard);
+                  if (!squaresArr[4]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[4] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square5 ? (
+                {!squaresArr[4] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square5.code}
-                    alt={square5.code}
-                    src={square5.image}
+                    key={squaresArr[4].code}
+                    alt={squaresArr[4].code}
+                    src={squaresArr[4].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -187,20 +207,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square6) {
-                    setSquare6(selectedCard);
+                  if (!squaresArr[5]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[5] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square6 ? (
+                {!squaresArr[5] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square6.code}
-                    alt={square6.code}
-                    src={square6.image}
+                    key={squaresArr[5].code}
+                    alt={squaresArr[5].code}
+                    src={squaresArr[5].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -208,20 +232,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square7) {
-                    setSquare7(selectedCard);
+                  if (!squaresArr[6]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[6] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square7 ? (
+                {!squaresArr[6] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square7.code}
-                    alt={square7.code}
-                    src={square7.image}
+                    key={squaresArr[6].code}
+                    alt={squaresArr[6].code}
+                    src={squaresArr[6].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -231,20 +259,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square8) {
-                    setSquare8(selectedCard);
+                  if (!squaresArr[7]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[7] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square8 ? (
+                {!squaresArr[7] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square8.code}
-                    alt={square8.code}
-                    src={square8.image}
+                    key={squaresArr[7].code}
+                    alt={squaresArr[7].code}
+                    src={squaresArr[7].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -252,20 +284,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square9) {
-                    setSquare9(selectedCard);
+                  if (!squaresArr[8]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[8] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square9 ? (
+                {!squaresArr[8] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square9.code}
-                    alt={square9.code}
-                    src={square9.image}
+                    key={squaresArr[8].code}
+                    alt={squaresArr[8].code}
+                    src={squaresArr[8].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -275,20 +311,24 @@ export const Game = () => {
               <section
                 className="player-one-square"
                 onClick={() => {
-                  if (!square10) {
-                    setSquare10(selectedCard);
+                  if (!squaresArr[9]) {
+                    setSquaresArr((current) => {
+                      const updatedArr = [...current];
+                      updatedArr[9] = selectedCard;
+                      return updatedArr;
+                    });
                     removeCardFromHand();
                   }
                 }}
               >
-                {!square10 ? (
+                {!squaresArr[9] ? (
                   <section></section>
                 ) : (
                   <img
                     className="card-on-board"
-                    key={square10.code}
-                    alt={square10.code}
-                    src={square10.image}
+                    key={squaresArr[9].code}
+                    alt={squaresArr[9].code}
+                    src={squaresArr[9].image}
                     style={{ width: "50px" }}
                   />
                 )}
@@ -324,6 +364,9 @@ export const Game = () => {
                   );
                 })}
           </section>
+          <button style={{ marginTop: "10px" }} onClick={playerReady}>
+            ready
+          </button>
         </section>
       )}
     </section>

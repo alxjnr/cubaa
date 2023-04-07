@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { Game } from "./Game";
 import { socket } from "../socket";
 import { currentUsersContext } from "../contexts/currentUsers";
+import { GamePrep } from "./GamePrep";
 
 export const Lobby = ({ isPlayingGame }) => {
   const { currentUsers, setCurrentUsers } = useContext(currentUsersContext);
@@ -38,7 +38,7 @@ export const Lobby = ({ isPlayingGame }) => {
           <button onClick={startGame}>start</button>
         </section>
       ) : (
-        <Game />
+        <GamePrep />
       )}
     </section>
   );

@@ -5,6 +5,7 @@ import { playerOneHandContext } from "./contexts/playerOneHand";
 import { playerTwoHandContext } from "./contexts/playerTwoHand";
 import { thisUserContext } from "./contexts/thisUser";
 import { currentUsersContext } from "./contexts/currentUsers";
+import { playersReadyContext } from "./contexts/playersReady";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -14,6 +15,7 @@ export default function App() {
   const [currentUsers, setCurrentUsers] = useState([]);
   const [thisUser, setThisUser] = useState("");
   const [userCount, setUserCount] = useState(0);
+  const [playersReady, setPlayersReady] = useState(false);
 
   useEffect(() => {
     console.log("rendering");
@@ -57,6 +59,23 @@ export default function App() {
       }
     });
 
+    const playersReadyObj = {
+      playerOneReady: false,
+      playerTwoReady: false,
+    };
+
+    socket.on("playerReady", (player) => {
+      if (player === "playerOne") {
+        playersReadyObj.playerOneReady = true;
+      } else if (player === "playerTwo") {
+        playersReadyObj.playerTwoReady = true;
+      }
+
+      if (playersReadyObj.playerOneReady && playersReadyObj.playerTwoReady) {
+        setPlayersReady(true);
+      }
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -69,40 +88,42 @@ export default function App() {
   }, []);
 
   return (
-    <currentUsersContext.Provider value={{ currentUsers, setCurrentUsers }}>
-      <playerOneHandContext.Provider
-        value={{ playerOneHand, setPlayerOneHand }}
-      >
-        <playerTwoHandContext.Provider
-          value={{ playerTwoHand, setPlayerTwoHand }}
+    <playersReadyContext.Provider value={{ playersReady, setPlayersReady }}>
+      <currentUsersContext.Provider value={{ currentUsers, setCurrentUsers }}>
+        <playerOneHandContext.Provider
+          value={{ playerOneHand, setPlayerOneHand }}
         >
-          <thisUserContext.Provider value={{ thisUser, setThisUser }}>
-            <div className="App">
-              <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
-              {isConnected ? (
-                <section>
-                  <Home
-                    isPlayingGame={isPlayingGame}
-                    setIsPlayingGame={setIsPlayingGame}
-                  />
-                  <p
-                    style={{
-                      fontSize: 10,
-                      margin: "auto",
-                      textAlign: "center",
-                      marginTop: "80vw",
-                    }}
-                  >
-                    is connected {socket.id}
-                  </p>
-                </section>
-              ) : (
-                <h5>connecting...</h5>
-              )}
-            </div>
-          </thisUserContext.Provider>
-        </playerTwoHandContext.Provider>
-      </playerOneHandContext.Provider>
-    </currentUsersContext.Provider>
+          <playerTwoHandContext.Provider
+            value={{ playerTwoHand, setPlayerTwoHand }}
+          >
+            <thisUserContext.Provider value={{ thisUser, setThisUser }}>
+              <div className="App">
+                <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
+                {isConnected ? (
+                  <section>
+                    <Home
+                      isPlayingGame={isPlayingGame}
+                      setIsPlayingGame={setIsPlayingGame}
+                    />
+                    <p
+                      style={{
+                        fontSize: 10,
+                        margin: "auto",
+                        textAlign: "center",
+                        marginTop: "80vw",
+                      }}
+                    >
+                      is connected {socket.id}
+                    </p>
+                  </section>
+                ) : (
+                  <h5>connecting...</h5>
+                )}
+              </div>
+            </thisUserContext.Provider>
+          </playerTwoHandContext.Provider>
+        </playerOneHandContext.Provider>
+      </currentUsersContext.Provider>
+    </playersReadyContext.Provider>
   );
 }
