@@ -6,16 +6,25 @@ import { playerTwoHandContext } from "./contexts/playerTwoHand";
 import { thisUserContext } from "./contexts/thisUser";
 import { currentUsersContext } from "./contexts/currentUsers";
 import { playersReadyContext } from "./contexts/playersReady";
+import { playerOneTriangleContext } from "./contexts/playerOneTriangle";
+import { playerTwoTriangleContext } from "./contexts/playerTwoTriangle";
+import { selectedCardContext } from "./contexts/selectedCard";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isPlayingGame, setIsPlayingGame] = useState(false);
+
   const [playerOneHand, setPlayerOneHand] = useState([]);
   const [playerTwoHand, setPlayerTwoHand] = useState([]);
+
+  const [playerOneTriangle, setPlayerOneTriangle] = useState([]);
+  const [playerTwoTriangle, setPlayerTwoTriangle] = useState([]);
+
   const [currentUsers, setCurrentUsers] = useState([]);
   const [thisUser, setThisUser] = useState("");
   const [userCount, setUserCount] = useState(0);
   const [playersReady, setPlayersReady] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
 
   useEffect(() => {
     console.log("rendering");
@@ -72,7 +81,19 @@ export default function App() {
       }
 
       if (playersReadyObj.playerOneReady && playersReadyObj.playerTwoReady) {
-        setPlayersReady(true);
+        setTimeout(() => {
+          setPlayersReady(true);
+        }, 3000);
+      }
+    });
+
+    socket.on("setTriangle", (player, squaresArray) => {
+      if (player === "playerOne") {
+        console.log("player one set");
+        setPlayerOneTriangle(squaresArray);
+      } else if (player === "playerTwo") {
+        console.log("player two set");
+        setPlayerTwoTriangle(squaresArray);
       }
     });
 
@@ -84,46 +105,62 @@ export default function App() {
       socket.off("isPlayingGame");
       socket.off("drawCards");
       socket.off("assignPlayer");
+      socket.off("playerReady");
+      socket.off("setTriangle");
     };
   }, []);
 
   return (
-    <playersReadyContext.Provider value={{ playersReady, setPlayersReady }}>
-      <currentUsersContext.Provider value={{ currentUsers, setCurrentUsers }}>
-        <playerOneHandContext.Provider
-          value={{ playerOneHand, setPlayerOneHand }}
+    <selectedCardContext.Provider value={{ selectedCard, setSelectedCard }}>
+      <playerOneTriangleContext.Provider
+        value={{ playerOneTriangle, setPlayerOneTriangle }}
+      >
+        <playerTwoTriangleContext.Provider
+          value={{ playerTwoTriangle, setPlayerTwoTriangle }}
         >
-          <playerTwoHandContext.Provider
-            value={{ playerTwoHand, setPlayerTwoHand }}
+          <playersReadyContext.Provider
+            value={{ playersReady, setPlayersReady }}
           >
-            <thisUserContext.Provider value={{ thisUser, setThisUser }}>
-              <div className="App">
-                <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
-                {isConnected ? (
-                  <section>
-                    <Home
-                      isPlayingGame={isPlayingGame}
-                      setIsPlayingGame={setIsPlayingGame}
-                    />
-                    <p
-                      style={{
-                        fontSize: 10,
-                        margin: "auto",
-                        textAlign: "center",
-                        marginTop: "80vw",
-                      }}
-                    >
-                      is connected {socket.id}
-                    </p>
-                  </section>
-                ) : (
-                  <h5>connecting...</h5>
-                )}
-              </div>
-            </thisUserContext.Provider>
-          </playerTwoHandContext.Provider>
-        </playerOneHandContext.Provider>
-      </currentUsersContext.Provider>
-    </playersReadyContext.Provider>
+            <currentUsersContext.Provider
+              value={{ currentUsers, setCurrentUsers }}
+            >
+              <playerOneHandContext.Provider
+                value={{ playerOneHand, setPlayerOneHand }}
+              >
+                <playerTwoHandContext.Provider
+                  value={{ playerTwoHand, setPlayerTwoHand }}
+                >
+                  <thisUserContext.Provider value={{ thisUser, setThisUser }}>
+                    <div className="App">
+                      <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
+                      {isConnected ? (
+                        <section>
+                          <Home
+                            isPlayingGame={isPlayingGame}
+                            setIsPlayingGame={setIsPlayingGame}
+                          />
+                          <p
+                            style={{
+                              fontSize: 10,
+                              margin: "auto",
+                              textAlign: "center",
+                              marginTop: "80vw",
+                            }}
+                          >
+                            is connected {socket.id}
+                          </p>
+                        </section>
+                      ) : (
+                        <h5>connecting...</h5>
+                      )}
+                    </div>
+                  </thisUserContext.Provider>
+                </playerTwoHandContext.Provider>
+              </playerOneHandContext.Provider>
+            </currentUsersContext.Provider>
+          </playersReadyContext.Provider>
+        </playerTwoTriangleContext.Provider>
+      </playerOneTriangleContext.Provider>
+    </selectedCardContext.Provider>
   );
 }

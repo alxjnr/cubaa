@@ -92,3 +92,22 @@ code {
   z-index: 3;
   transform: scale(1.5);
 }
+
+.card-on-board-selected {
+  border: solid gold 1px;
+  box-sizing: border-box;
+  animation: glowing-border 1.5s ease-in-out infinite;
+}
+
+@keyframes glowing-border {
+  0% {
+    box-shadow: 0 0 10px gold;
+  }
+  50% {
+    box-shadow: 0 0 10px green;
+    border: solid green 1px;
+  }
+  100% {
+    box-shadow: 0 0 10px gold;
+  }
+}

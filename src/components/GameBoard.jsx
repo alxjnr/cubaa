@@ -4,6 +4,9 @@ import { thisUserContext } from "../contexts/thisUser";
 import { useContext } from "react";
 import { PlayerOneBoardHand } from "./PlayerOneBoardHand";
 import { PlayerTwoBoardHand } from "./PlayerTwoBoardHand";
+import { PlayerOneBoardTriangle } from "./PlayerOneBoardTriangle";
+import { PlayerTwoBoardTriangle } from "./PlayerTwoBoardTriangle";
+import { selectedCardContext } from "../contexts/selectedCard";
 
 export const GameBoard = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
@@ -15,11 +18,15 @@ export const GameBoard = () => {
       {thisUser === "playerOne" ? (
         <section>
           <PlayerTwoBoardHand />
+          <PlayerTwoBoardTriangle />
+          <PlayerOneBoardTriangle />
           <PlayerOneBoardHand />
         </section>
       ) : (
         <section>
           <PlayerOneBoardHand />
+          <PlayerOneBoardTriangle />
+          <PlayerTwoBoardTriangle />
           <PlayerTwoBoardHand />
         </section>
       )}

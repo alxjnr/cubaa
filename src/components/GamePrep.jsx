@@ -6,16 +6,19 @@ import { playersReadyContext } from "../contexts/playersReady";
 import { socket } from "../socket";
 import axios from "axios";
 import { GameBoard } from "./GameBoard";
+import { selectedCardContext } from "../contexts/selectedCard";
 
 export const GamePrep = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
   const { playerTwoHand } = useContext(playerTwoHandContext);
   const { playersReady } = useContext(playersReadyContext);
   const { thisUser } = useContext(thisUserContext);
-  const [selectedCard, setSelectedCard] = useState({});
+  // const [selectedCard, setSelectedCard] = useState({});
+  const { selectedCard, setSelectedCard } = useContext(selectedCardContext);
 
   const [isLoading, setIsLoading] = useState(true);
   const [squaresArr, setSquaresArr] = useState([]);
+  // const [cardHighlighted, setCardHighlighted] = useState(false);
 
   const drawToPlayer = (cards, player) => {
     socket.emit("drawCards", cards, player);
@@ -41,6 +44,10 @@ export const GamePrep = () => {
 
   const playerReady = () => {
     socket.emit("playerReady", thisUser);
+  };
+
+  const setTriangle = () => {
+    socket.emit("setTriangle", thisUser, squaresArr);
   };
 
   useEffect(() => {
@@ -86,7 +93,10 @@ export const GamePrep = () => {
                       updatedArr[0] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -111,7 +121,10 @@ export const GamePrep = () => {
                       updatedArr[1] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -136,7 +149,10 @@ export const GamePrep = () => {
                       updatedArr[2] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -161,7 +177,10 @@ export const GamePrep = () => {
                       updatedArr[3] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -188,7 +207,10 @@ export const GamePrep = () => {
                       updatedArr[4] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -213,7 +235,10 @@ export const GamePrep = () => {
                       updatedArr[5] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -238,7 +263,10 @@ export const GamePrep = () => {
                       updatedArr[6] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -265,7 +293,10 @@ export const GamePrep = () => {
                       updatedArr[7] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -290,7 +321,10 @@ export const GamePrep = () => {
                       updatedArr[8] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -317,7 +351,10 @@ export const GamePrep = () => {
                       updatedArr[9] = selectedCard;
                       return updatedArr;
                     });
-                    removeCardFromHand();
+                    if (selectedCard) {
+                      removeCardFromHand();
+                      setSelectedCard({});
+                    }
                   }
                 }}
               >
@@ -340,7 +377,11 @@ export const GamePrep = () => {
               ? playerOneHand.map((card) => {
                   return (
                     <img
-                      className="card-on-board"
+                      className={
+                        selectedCard === card
+                          ? "card-on-board-selected"
+                          : "card-on-board"
+                      }
                       key={card.code}
                       alt={card.code}
                       src={card.image}
@@ -353,7 +394,11 @@ export const GamePrep = () => {
               : playerTwoHand.map((card) => {
                   return (
                     <img
-                      className="card-on-board"
+                      className={
+                        selectedCard === card
+                          ? "card-on-board-selected"
+                          : "card-on-board"
+                      }
                       key={card.code}
                       alt={card.code}
                       src={card.image}
@@ -364,7 +409,13 @@ export const GamePrep = () => {
                   );
                 })}
           </section>
-          <button style={{ marginTop: "10px" }} onClick={playerReady}>
+          <button
+            style={{ marginTop: "10px" }}
+            onClick={() => {
+              playerReady();
+              setTriangle();
+            }}
+          >
             ready
           </button>
         </section>
