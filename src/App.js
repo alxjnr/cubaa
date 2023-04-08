@@ -41,8 +41,8 @@ export default function App() {
       setShouldRunEffect(false);
       setGlobalDeck((prev) => {
         const prevDeck = [...prev];
-        const playerOneCards = prevDeck.slice(0, 16);
-        const playerTwoCards = prevDeck.slice(16, 32);
+        const playerOneCards = prevDeck.splice(0, 16);
+        const playerTwoCards = prevDeck.splice(0, 16);
         setPlayerOneHand(playerOneCards);
         setPlayerTwoHand(playerTwoCards);
         return prevDeck;
@@ -188,28 +188,21 @@ export default function App() {
       }, 2000);
     });
 
-    socket.on("drawFromPile", (user, userTurn) => {
-      if (user === "playerOne" && userTurn === "playerOne") {
-        setGlobalDeck((prev) => {
-          const prevDeck = [...prev];
-          const newCards = prevDeck.splice(0, 2);
+    socket.on("drawFromPile", (user) => {
+      setGlobalDeck((prev) => {
+        const prevDeck = [...prev];
+        const newCards = prevDeck.splice(0, 2);
+        if (user === "playerOne") {
           setPlayerOneHand((current) => {
             return [...current, ...newCards];
           });
-          return prevDeck;
-        });
-        setCurrentTurn("playerTwo");
-      } else if (user === "playerTwo" && userTurn === "playerTwo") {
-        setGlobalDeck((prev) => {
-          const prevDeck = [...prev];
-          const newCards = prevDeck.splice(0, 2);
+        } else if (user === "playerTwo") {
           setPlayerTwoHand((current) => {
             return [...current, ...newCards];
           });
-          return prevDeck;
-        });
-        setCurrentTurn("playerOne");
-      }
+        }
+        return prevDeck;
+      });
     });
 
     return () => {
