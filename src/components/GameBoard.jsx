@@ -7,6 +7,7 @@ import { PlayerTwoBoardHand } from "./PlayerTwoBoardHand";
 import { PlayerOneBoardTriangle } from "./PlayerOneBoardTriangle";
 import { PlayerTwoBoardTriangle } from "./PlayerTwoBoardTriangle";
 import { selectedCardContext } from "../contexts/selectedCard";
+import { MainDeck } from "./MainDeck";
 
 export const GameBoard = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
@@ -14,22 +15,33 @@ export const GameBoard = () => {
   const { thisUser } = useContext(thisUserContext);
 
   return (
-    <section>
-      {thisUser === "playerOne" ? (
-        <section>
-          <PlayerTwoBoardHand />
-          <PlayerTwoBoardTriangle />
-          <PlayerOneBoardTriangle />
-          <PlayerOneBoardHand />
-        </section>
-      ) : (
-        <section>
-          <PlayerOneBoardHand />
-          <PlayerOneBoardTriangle />
-          <PlayerTwoBoardTriangle />
-          <PlayerTwoBoardHand />
-        </section>
-      )}
+    <section
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+      }}
+    >
+      <section>
+        {thisUser === "playerOne" ? (
+          <section>
+            <PlayerTwoBoardHand />
+            <PlayerTwoBoardTriangle />
+            <PlayerOneBoardTriangle />
+            <PlayerOneBoardHand />
+          </section>
+        ) : (
+          <section>
+            <PlayerOneBoardHand />
+            <PlayerOneBoardTriangle />
+            <PlayerTwoBoardTriangle />
+            <PlayerTwoBoardHand />
+          </section>
+        )}
+      </section>
+      <section>
+        <MainDeck />
+      </section>
     </section>
   );
 };

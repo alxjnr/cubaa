@@ -44,13 +44,10 @@ export const PlayerTwoBoardTriangle = () => {
 
     setTimeout(() => {
       console.log(cardInBattle);
-      if (selectedCardVal > opposingCardVal) {
+      if (selectedCardVal >= opposingCardVal) {
         console.log("card won");
         socket.emit("cardToPlayerOne", opposingCard);
         socket.emit("playerTwoLostTile", tileIndex);
-        socket.emit("turnSwitch", currentTurn);
-      } else if (selectedCardVal === opposingCardVal) {
-        console.log("same cards");
         socket.emit("turnSwitch", currentTurn);
       } else {
         socket.emit("cardToPlayerTwo", selectedCard);

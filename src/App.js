@@ -34,14 +34,22 @@ export default function App() {
   const [cardInBattle, setCardInBattle] = useState({});
   const [globalDeck, setGlobalDeck] = useState([]);
   const [gamePrepLoading, setGamePrepLoading] = useState(true);
+  const [shouldRunEffect, setShouldRunEffect] = useState(true);
 
   useEffect(() => {
-    if (globalDeck.length > 0) {
-      setPlayerOneHand(globalDeck.splice(0, 16));
-      setPlayerTwoHand(globalDeck.splice(0, 16));
+    if (globalDeck.length > 0 && shouldRunEffect) {
+      setShouldRunEffect(false);
+      setGlobalDeck((prev) => {
+        const prevDeck = [...prev];
+        const playerOneCards = prevDeck.slice(0, 16);
+        const playerTwoCards = prevDeck.slice(16, 32);
+        setPlayerOneHand(playerOneCards);
+        setPlayerTwoHand(playerTwoCards);
+        return prevDeck;
+      });
       setGamePrepLoading(false);
     }
-  }, [globalDeck]);
+  }, [globalDeck, shouldRunEffect]);
 
   useEffect(() => {
     console.log("rendering");
@@ -75,6 +83,7 @@ export default function App() {
 
     socket.on("modifyHand", (newHand, player) => {
       if (player === "playerOne") {
+        console.log("here");
         setPlayerOneHand(newHand);
       } else {
         setPlayerTwoHand(newHand);
@@ -179,6 +188,30 @@ export default function App() {
       }, 2000);
     });
 
+    socket.on("drawFromPile", (user, userTurn) => {
+      if (user === "playerOne" && userTurn === "playerOne") {
+        setGlobalDeck((prev) => {
+          const prevDeck = [...prev];
+          const newCards = prevDeck.splice(0, 2);
+          setPlayerOneHand((current) => {
+            return [...current, ...newCards];
+          });
+          return prevDeck;
+        });
+        setCurrentTurn("playerTwo");
+      } else if (user === "playerTwo" && userTurn === "playerTwo") {
+        setGlobalDeck((prev) => {
+          const prevDeck = [...prev];
+          const newCards = prevDeck.splice(0, 2);
+          setPlayerTwoHand((current) => {
+            return [...current, ...newCards];
+          });
+          return prevDeck;
+        });
+        setCurrentTurn("playerOne");
+      }
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -195,6 +228,7 @@ export default function App() {
       socket.off("playerTwoLostTile");
       socket.off("playerOneLostCard");
       socket.off("playerTwoLostCard");
+      socket.off("drawFromPile");
     };
   }, []);
 
