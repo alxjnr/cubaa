@@ -112,6 +112,15 @@ export default function App() {
       });
     });
 
+    socket.on("playerTwoLostTile", (tileIndex) => {
+      setPlayerTwoTriangle((prev) => {
+        const updatedTriangle = [...prev];
+        console.log(updatedTriangle[tileIndex]);
+        updatedTriangle[tileIndex] = false;
+        return updatedTriangle;
+      });
+    });
+
     socket.on("cardToPlayerOne", (card) => {
       setPlayerOneHand((current) => {
         return [...current, card];
@@ -120,6 +129,17 @@ export default function App() {
 
     socket.on("playerTwoLostCard", (cardSelected) => {
       setPlayerTwoHand((current) => {
+        const currentHand = [...current];
+        const selectedIndex = currentHand.findIndex(
+          (card) => card.code === cardSelected.code
+        );
+        currentHand.splice(selectedIndex, 1);
+        return currentHand;
+      });
+    });
+
+    socket.on("playerOneLostCard", (cardSelected) => {
+      setPlayerOneHand((current) => {
         const currentHand = [...current];
         const selectedIndex = currentHand.findIndex(
           (card) => card.code === cardSelected.code
