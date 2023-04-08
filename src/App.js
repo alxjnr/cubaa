@@ -9,6 +9,7 @@ import { playersReadyContext } from "./contexts/playersReady";
 import { playerOneTriangleContext } from "./contexts/playerOneTriangle";
 import { playerTwoTriangleContext } from "./contexts/playerTwoTriangle";
 import { selectedCardContext } from "./contexts/selectedCard";
+import { currentTurnContext } from "./contexts/currentTurn";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -25,6 +26,7 @@ export default function App() {
   const [userCount, setUserCount] = useState(0);
   const [playersReady, setPlayersReady] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentTurn, setCurrentTurn] = useState("playerOne");
 
   useEffect(() => {
     console.log("rendering");
@@ -149,6 +151,19 @@ export default function App() {
       });
     });
 
+    socket.on("turnSwitch", (currentTurnUser) => {
+      if (currentTurnUser === "playerOne") {
+        setCurrentTurn("playerTwo");
+      } else if (currentTurnUser === "playerTwo") {
+        setCurrentTurn("playerOne");
+      }
+
+      console.log("turn switched");
+      setTimeout(() => {
+        console.log(currentTurn);
+      }, 3000);
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -162,60 +177,65 @@ export default function App() {
       socket.off("cardToPlayerTwo");
       socket.off("playerOneLostTile");
       socket.off("cardToPlayerOne");
+      socket.off("playerTwoLostTile");
+      socket.off("playerOneLostCard");
+      socket.off("playerTwoLostCard");
     };
   }, []);
 
   return (
-    <selectedCardContext.Provider value={{ selectedCard, setSelectedCard }}>
-      <playerOneTriangleContext.Provider
-        value={{ playerOneTriangle, setPlayerOneTriangle }}
-      >
-        <playerTwoTriangleContext.Provider
-          value={{ playerTwoTriangle, setPlayerTwoTriangle }}
+    <currentTurnContext.Provider value={{ currentTurn, setCurrentTurn }}>
+      <selectedCardContext.Provider value={{ selectedCard, setSelectedCard }}>
+        <playerOneTriangleContext.Provider
+          value={{ playerOneTriangle, setPlayerOneTriangle }}
         >
-          <playersReadyContext.Provider
-            value={{ playersReady, setPlayersReady }}
+          <playerTwoTriangleContext.Provider
+            value={{ playerTwoTriangle, setPlayerTwoTriangle }}
           >
-            <currentUsersContext.Provider
-              value={{ currentUsers, setCurrentUsers }}
+            <playersReadyContext.Provider
+              value={{ playersReady, setPlayersReady }}
             >
-              <playerOneHandContext.Provider
-                value={{ playerOneHand, setPlayerOneHand }}
+              <currentUsersContext.Provider
+                value={{ currentUsers, setCurrentUsers }}
               >
-                <playerTwoHandContext.Provider
-                  value={{ playerTwoHand, setPlayerTwoHand }}
+                <playerOneHandContext.Provider
+                  value={{ playerOneHand, setPlayerOneHand }}
                 >
-                  <thisUserContext.Provider value={{ thisUser, setThisUser }}>
-                    <div className="App">
-                      <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
-                      {isConnected ? (
-                        <section>
-                          <Home
-                            isPlayingGame={isPlayingGame}
-                            setIsPlayingGame={setIsPlayingGame}
-                          />
-                          <p
-                            style={{
-                              fontSize: 10,
-                              margin: "auto",
-                              textAlign: "center",
-                              marginTop: "80vw",
-                            }}
-                          >
-                            is connected {socket.id}
-                          </p>
-                        </section>
-                      ) : (
-                        <h5>connecting...</h5>
-                      )}
-                    </div>
-                  </thisUserContext.Provider>
-                </playerTwoHandContext.Provider>
-              </playerOneHandContext.Provider>
-            </currentUsersContext.Provider>
-          </playersReadyContext.Provider>
-        </playerTwoTriangleContext.Provider>
-      </playerOneTriangleContext.Provider>
-    </selectedCardContext.Provider>
+                  <playerTwoHandContext.Provider
+                    value={{ playerTwoHand, setPlayerTwoHand }}
+                  >
+                    <thisUserContext.Provider value={{ thisUser, setThisUser }}>
+                      <div className="App">
+                        <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
+                        {isConnected ? (
+                          <section>
+                            <Home
+                              isPlayingGame={isPlayingGame}
+                              setIsPlayingGame={setIsPlayingGame}
+                            />
+                            <p
+                              style={{
+                                fontSize: 10,
+                                margin: "auto",
+                                textAlign: "center",
+                                marginTop: "80vw",
+                              }}
+                            >
+                              is connected {socket.id}
+                            </p>
+                          </section>
+                        ) : (
+                          <h5>connecting...</h5>
+                        )}
+                      </div>
+                    </thisUserContext.Provider>
+                  </playerTwoHandContext.Provider>
+                </playerOneHandContext.Provider>
+              </currentUsersContext.Provider>
+            </playersReadyContext.Provider>
+          </playerTwoTriangleContext.Provider>
+        </playerOneTriangleContext.Provider>
+      </selectedCardContext.Provider>
+    </currentTurnContext.Provider>
   );
 }

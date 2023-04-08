@@ -3,11 +3,14 @@ import { playerOneTriangleContext } from "../contexts/playerOneTriangle";
 import { thisUserContext } from "../contexts/thisUser";
 import { selectedCardContext } from "../contexts/selectedCard";
 import { socket } from "../socket";
+import { currentTurnContext } from "../contexts/currentTurn";
 
 export const PlayerOneBoardTriangle = () => {
   const { playerOneTriangle } = useContext(playerOneTriangleContext);
   const { thisUser } = useContext(thisUserContext);
   const { selectedCard } = useContext(selectedCardContext);
+  const { currentTurn } = useContext(currentTurnContext);
+
   const [revealed, setRevealed] = useState(
     new Array(playerOneTriangle.length).fill(false)
   );
@@ -46,6 +49,8 @@ export const PlayerOneBoardTriangle = () => {
       socket.emit("cardToPlayerOne", selectedCard);
       socket.emit("playerTwoLostCard", selectedCard);
     }
+
+    socket.emit("turnSwitch", currentTurn);
   };
 
   return (
@@ -212,7 +217,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[9] = true;
@@ -241,7 +250,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[7] = true;
@@ -268,7 +281,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[8] = true;
@@ -297,7 +314,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[4] = true;
@@ -324,7 +345,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[5] = true;
@@ -351,7 +376,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[6] = true;
@@ -380,7 +409,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[0] = true;
@@ -407,7 +440,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[1] = true;
@@ -434,7 +471,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[2] = true;
@@ -461,7 +502,11 @@ export const PlayerOneBoardTriangle = () => {
                   }
                   style={{ width: "50px" }}
                   onClick={() => {
-                    if (selectedCard && thisUser === "playerTwo") {
+                    if (
+                      selectedCard &&
+                      thisUser === "playerTwo" &&
+                      currentTurn === "playerTwo"
+                    ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
                         updatedRevealed[3] = true;
