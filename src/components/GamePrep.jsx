@@ -7,6 +7,7 @@ import { socket } from "../socket";
 import axios from "axios";
 import { GameBoard } from "./GameBoard";
 import { selectedCardContext } from "../contexts/selectedCard";
+import { gamePrepLoadingContext } from "../contexts/gamePrepLoading";
 
 export const GamePrep = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
@@ -16,12 +17,12 @@ export const GamePrep = () => {
   // const [selectedCard, setSelectedCard] = useState({});
   const { selectedCard, setSelectedCard } = useContext(selectedCardContext);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const { gamePrepLoading } = useContext(gamePrepLoadingContext);
   const [squaresArr, setSquaresArr] = useState([]);
   // const [cardHighlighted, setCardHighlighted] = useState(false);
 
-  const drawToPlayer = (cards, player) => {
-    socket.emit("drawCards", cards, player);
+  const drawToPlayer = (cards) => {
+    socket.emit("drawCards", cards);
   };
 
   const modifyHand = (newHand, player) => {
@@ -51,32 +52,25 @@ export const GamePrep = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
-      .then((res) => {
-        let deck_id = res.data.deck_id;
-        axios
-          .get(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=16`)
-          .then((res) => {
-            if (thisUser === "playerOne") {
-              drawToPlayer(res.data.cards, "playerOne");
-            } else {
-              axios
-                .get(
-                  `https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=16`
-                )
-                .then((res) => {
-                  drawToPlayer(res.data.cards, "playerTwo");
-                });
-            }
-            setIsLoading(false);
-          });
-      });
+    if (thisUser === "playerOne") {
+      axios
+        .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+        .then((res) => {
+          let deck_id = res.data.deck_id;
+          axios
+            .get(
+              `https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=52`
+            )
+            .then((res) => {
+              drawToPlayer(res.data.cards);
+            });
+        });
+    }
   }, []);
 
   return (
     <section>
-      {isLoading ? (
+      {gamePrepLoading ? (
         <h2>loading...</h2>
       ) : playersReady ? (
         <GameBoard />
