@@ -205,6 +205,58 @@ export default function App() {
       });
     });
 
+    socket.on("playerTwoDiscard", (cardToDiscard) => {
+      setPlayerTwoHand((current) => {
+        const currentHand = [...current];
+        const selectedIndex = currentHand.findIndex(
+          (card) => card.code === cardToDiscard.code
+        );
+        currentHand.splice(selectedIndex, 1);
+        return currentHand;
+      });
+      setGlobalDeck((current) => {
+        return [...current, cardToDiscard];
+      });
+    });
+
+    socket.on("playerOneDiscard", (cardToDiscard) => {
+      setPlayerOneHand((current) => {
+        const currentHand = [...current];
+        const selectedIndex = currentHand.findIndex(
+          (card) => card.code === cardToDiscard.code
+        );
+        currentHand.splice(selectedIndex, 1);
+        return currentHand;
+      });
+      setGlobalDeck((current) => {
+        return [...current, cardToDiscard];
+      });
+    });
+
+    socket.on("playerOneTileDiscard", (tileIndex, opposingCard) => {
+      setPlayerOneTriangle((prev) => {
+        const updatedTriangle = [...prev];
+        console.log(updatedTriangle[tileIndex]);
+        updatedTriangle[tileIndex] = false;
+        return updatedTriangle;
+      });
+      setGlobalDeck((current) => {
+        return [...current, opposingCard];
+      });
+    });
+
+    socket.on("playerTwoTileDiscard", (tileIndex, opposingCard) => {
+      setPlayerTwoTriangle((prev) => {
+        const updatedTriangle = [...prev];
+        console.log(updatedTriangle[tileIndex]);
+        updatedTriangle[tileIndex] = false;
+        return updatedTriangle;
+      });
+      setGlobalDeck((current) => {
+        return [...current, opposingCard];
+      });
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -222,6 +274,8 @@ export default function App() {
       socket.off("playerOneLostCard");
       socket.off("playerTwoLostCard");
       socket.off("drawFromPile");
+      socket.off("playerTwoDiscard");
+      socket.off("playerOneDiscard");
     };
   }, []);
 

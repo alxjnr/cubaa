@@ -43,12 +43,22 @@ export const PlayerOneBoardTriangle = () => {
     setTimeout(() => {
       if (selectedCardVal >= opposingCardVal) {
         console.log("card won");
-        socket.emit("cardToPlayerTwo", opposingCard);
-        socket.emit("playerOneLostTile", tileIndex);
+        if (selectedCardVal > 10) {
+          socket.emit("playerTwoDiscard", selectedCard);
+          socket.emit("playerOneTileDiscard", tileIndex, opposingCard);
+        }
+        if (opposingCardVal <= 10) {
+          socket.emit("cardToPlayerTwo", opposingCard);
+          socket.emit("playerOneLostTile", tileIndex);
+        }
         socket.emit("turnSwitch", currentTurn);
       } else {
-        socket.emit("cardToPlayerOne", selectedCard);
-        socket.emit("playerTwoLostCard", selectedCard);
+        if (selectedCardVal > 10) {
+          socket.emit("playerTwoDiscard", selectedCard);
+        } else {
+          socket.emit("playerTwoLostCard", selectedCard);
+          socket.emit("cardToPlayerOne", selectedCard);
+        }
         socket.emit("turnSwitch", currentTurn);
       }
     }, 2000);
