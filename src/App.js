@@ -10,6 +10,7 @@ import { playerOneTriangleContext } from "./contexts/playerOneTriangle";
 import { playerTwoTriangleContext } from "./contexts/playerTwoTriangle";
 import { selectedCardContext } from "./contexts/selectedCard";
 import { currentTurnContext } from "./contexts/currentTurn";
+import { cardInBattleContext } from "./contexts/cardInBattle";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -27,6 +28,7 @@ export default function App() {
   const [playersReady, setPlayersReady] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTurn, setCurrentTurn] = useState("playerOne");
+  const [cardInBattle, setCardInBattle] = useState({});
 
   useEffect(() => {
     console.log("rendering");
@@ -159,9 +161,13 @@ export default function App() {
       }
 
       console.log("turn switched");
+    });
+
+    socket.on("cardInBattle", (card) => {
+      setCardInBattle(card);
       setTimeout(() => {
-        console.log(currentTurn);
-      }, 3000);
+        setCardInBattle({});
+      }, 2000);
     });
 
     return () => {
@@ -184,58 +190,62 @@ export default function App() {
   }, []);
 
   return (
-    <currentTurnContext.Provider value={{ currentTurn, setCurrentTurn }}>
-      <selectedCardContext.Provider value={{ selectedCard, setSelectedCard }}>
-        <playerOneTriangleContext.Provider
-          value={{ playerOneTriangle, setPlayerOneTriangle }}
-        >
-          <playerTwoTriangleContext.Provider
-            value={{ playerTwoTriangle, setPlayerTwoTriangle }}
+    <cardInBattleContext.Provider value={{ cardInBattle, setCardInBattle }}>
+      <currentTurnContext.Provider value={{ currentTurn, setCurrentTurn }}>
+        <selectedCardContext.Provider value={{ selectedCard, setSelectedCard }}>
+          <playerOneTriangleContext.Provider
+            value={{ playerOneTriangle, setPlayerOneTriangle }}
           >
-            <playersReadyContext.Provider
-              value={{ playersReady, setPlayersReady }}
+            <playerTwoTriangleContext.Provider
+              value={{ playerTwoTriangle, setPlayerTwoTriangle }}
             >
-              <currentUsersContext.Provider
-                value={{ currentUsers, setCurrentUsers }}
+              <playersReadyContext.Provider
+                value={{ playersReady, setPlayersReady }}
               >
-                <playerOneHandContext.Provider
-                  value={{ playerOneHand, setPlayerOneHand }}
+                <currentUsersContext.Provider
+                  value={{ currentUsers, setCurrentUsers }}
                 >
-                  <playerTwoHandContext.Provider
-                    value={{ playerTwoHand, setPlayerTwoHand }}
+                  <playerOneHandContext.Provider
+                    value={{ playerOneHand, setPlayerOneHand }}
                   >
-                    <thisUserContext.Provider value={{ thisUser, setThisUser }}>
-                      <div className="App">
-                        <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
-                        {isConnected ? (
-                          <section>
-                            <Home
-                              isPlayingGame={isPlayingGame}
-                              setIsPlayingGame={setIsPlayingGame}
-                            />
-                            <p
-                              style={{
-                                fontSize: 10,
-                                margin: "auto",
-                                textAlign: "center",
-                                marginTop: "80vw",
-                              }}
-                            >
-                              is connected {socket.id}
-                            </p>
-                          </section>
-                        ) : (
-                          <h5>connecting...</h5>
-                        )}
-                      </div>
-                    </thisUserContext.Provider>
-                  </playerTwoHandContext.Provider>
-                </playerOneHandContext.Provider>
-              </currentUsersContext.Provider>
-            </playersReadyContext.Provider>
-          </playerTwoTriangleContext.Provider>
-        </playerOneTriangleContext.Provider>
-      </selectedCardContext.Provider>
-    </currentTurnContext.Provider>
+                    <playerTwoHandContext.Provider
+                      value={{ playerTwoHand, setPlayerTwoHand }}
+                    >
+                      <thisUserContext.Provider
+                        value={{ thisUser, setThisUser }}
+                      >
+                        <div className="App">
+                          <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
+                          {isConnected ? (
+                            <section>
+                              <Home
+                                isPlayingGame={isPlayingGame}
+                                setIsPlayingGame={setIsPlayingGame}
+                              />
+                              <p
+                                style={{
+                                  fontSize: 10,
+                                  margin: "auto",
+                                  textAlign: "center",
+                                  marginTop: "80vw",
+                                }}
+                              >
+                                is connected {socket.id}
+                              </p>
+                            </section>
+                          ) : (
+                            <h5>connecting...</h5>
+                          )}
+                        </div>
+                      </thisUserContext.Provider>
+                    </playerTwoHandContext.Provider>
+                  </playerOneHandContext.Provider>
+                </currentUsersContext.Provider>
+              </playersReadyContext.Provider>
+            </playerTwoTriangleContext.Provider>
+          </playerOneTriangleContext.Provider>
+        </selectedCardContext.Provider>
+      </currentTurnContext.Provider>
+    </cardInBattleContext.Provider>
   );
 }

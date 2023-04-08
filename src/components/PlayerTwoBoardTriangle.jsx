@@ -4,18 +4,21 @@ import { thisUserContext } from "../contexts/thisUser";
 import { selectedCardContext } from "../contexts/selectedCard";
 import { socket } from "../socket";
 import { currentTurnContext } from "../contexts/currentTurn";
+import { cardInBattleContext } from "../contexts/cardInBattle";
 
 export const PlayerTwoBoardTriangle = () => {
   const { playerTwoTriangle } = useContext(playerTwoTriangleContext);
   const { thisUser } = useContext(thisUserContext);
   const { selectedCard } = useContext(selectedCardContext);
   const { currentTurn } = useContext(currentTurnContext);
+  const { cardInBattle } = useContext(cardInBattleContext);
 
   const [revealed, setRevealed] = useState(
     new Array(playerTwoTriangle.length).fill(false)
   );
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
+    socket.emit("cardInBattle", selectedCard);
     let selectedCardVal = selectedCard.code[0];
     let opposingCardVal = opposingCard.code[0];
 
@@ -39,19 +42,22 @@ export const PlayerTwoBoardTriangle = () => {
       opposingCardVal = 14;
     }
 
-    if (selectedCardVal > opposingCardVal) {
-      console.log("card won");
-      socket.emit("cardToPlayerOne", opposingCard);
-      socket.emit("playerTwoLostTile", tileIndex);
-      socket.emit("turnSwitch", currentTurn);
-    } else if (selectedCardVal === opposingCardVal) {
-      console.log("same cards");
-      socket.emit("turnSwitch", currentTurn);
-    } else {
-      socket.emit("cardToPlayerTwo", selectedCard);
-      socket.emit("playerOneLostCard", selectedCard);
-      socket.emit("turnSwitch", currentTurn);
-    }
+    setTimeout(() => {
+      console.log(cardInBattle);
+      if (selectedCardVal > opposingCardVal) {
+        console.log("card won");
+        socket.emit("cardToPlayerOne", opposingCard);
+        socket.emit("playerTwoLostTile", tileIndex);
+        socket.emit("turnSwitch", currentTurn);
+      } else if (selectedCardVal === opposingCardVal) {
+        console.log("same cards");
+        socket.emit("turnSwitch", currentTurn);
+      } else {
+        socket.emit("cardToPlayerTwo", selectedCard);
+        socket.emit("playerOneLostCard", selectedCard);
+        socket.emit("turnSwitch", currentTurn);
+      }
+    }, 2000);
   };
 
   return (

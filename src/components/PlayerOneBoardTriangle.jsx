@@ -16,6 +16,7 @@ export const PlayerOneBoardTriangle = () => {
   );
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
+    socket.emit("cardInBattle", selectedCard);
     let selectedCardVal = selectedCard.code[0];
     let opposingCardVal = opposingCard.code[0];
 
@@ -39,18 +40,21 @@ export const PlayerOneBoardTriangle = () => {
       opposingCardVal = 14;
     }
 
-    if (selectedCardVal > opposingCardVal) {
-      console.log("card won");
-      socket.emit("cardToPlayerTwo", opposingCard);
-      socket.emit("playerOneLostTile", tileIndex);
-    } else if (selectedCardVal === opposingCardVal) {
-      console.log("same cards");
-    } else {
-      socket.emit("cardToPlayerOne", selectedCard);
-      socket.emit("playerTwoLostCard", selectedCard);
-    }
-
-    socket.emit("turnSwitch", currentTurn);
+    setTimeout(() => {
+      if (selectedCardVal > opposingCardVal) {
+        console.log("card won");
+        socket.emit("cardToPlayerTwo", opposingCard);
+        socket.emit("playerOneLostTile", tileIndex);
+        socket.emit("turnSwitch", currentTurn);
+      } else if (selectedCardVal === opposingCardVal) {
+        console.log("same cards");
+        socket.emit("turnSwitch", currentTurn);
+      } else {
+        socket.emit("cardToPlayerOne", selectedCard);
+        socket.emit("playerTwoLostCard", selectedCard);
+        socket.emit("turnSwitch", currentTurn);
+      }
+    }, 2000);
   };
 
   return (
