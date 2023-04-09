@@ -13,6 +13,7 @@ import { currentTurnContext } from "./contexts/currentTurn";
 import { cardInBattleContext } from "./contexts/cardInBattle";
 import { globalDeckContext } from "./contexts/globalDeck";
 import { gamePrepLoadingContext } from "./contexts/gamePrepLoading";
+import { playerOneRowsCheckContext } from "./contexts/playerOneRowsCheck";
 import axios from "axios";
 
 export default function App() {
@@ -35,6 +36,12 @@ export default function App() {
   const [globalDeck, setGlobalDeck] = useState([]);
   const [gamePrepLoading, setGamePrepLoading] = useState(true);
   const [shouldRunEffect, setShouldRunEffect] = useState(true);
+  const [playerOneRowsCheck, setPlayerOneRowsCheck] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   useEffect(() => {
     if (globalDeck.length > 0 && shouldRunEffect) {
@@ -257,6 +264,10 @@ export default function App() {
       });
     });
 
+    socket.on("gameWon", (user) => {
+      console.log(`${user} wins!`);
+    });
+
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
@@ -276,74 +287,85 @@ export default function App() {
       socket.off("drawFromPile");
       socket.off("playerTwoDiscard");
       socket.off("playerOneDiscard");
+      socket.off("playerOneTileDiscard");
+      socket.off("playerTwoTileDiscard");
+      socket.off("gameWon");
     };
   }, []);
 
   return (
-    <gamePrepLoadingContext.Provider
-      value={{ gamePrepLoading, setGamePrepLoading }}
+    <playerOneRowsCheckContext.Provider
+      value={{ playerOneRowsCheck, setPlayerOneRowsCheck }}
     >
-      <globalDeckContext.Provider value={{ globalDeck, setGlobalDeck }}>
-        <cardInBattleContext.Provider value={{ cardInBattle, setCardInBattle }}>
-          <currentTurnContext.Provider value={{ currentTurn, setCurrentTurn }}>
-            <selectedCardContext.Provider
-              value={{ selectedCard, setSelectedCard }}
+      <gamePrepLoadingContext.Provider
+        value={{ gamePrepLoading, setGamePrepLoading }}
+      >
+        <globalDeckContext.Provider value={{ globalDeck, setGlobalDeck }}>
+          <cardInBattleContext.Provider
+            value={{ cardInBattle, setCardInBattle }}
+          >
+            <currentTurnContext.Provider
+              value={{ currentTurn, setCurrentTurn }}
             >
-              <playerOneTriangleContext.Provider
-                value={{ playerOneTriangle, setPlayerOneTriangle }}
+              <selectedCardContext.Provider
+                value={{ selectedCard, setSelectedCard }}
               >
-                <playerTwoTriangleContext.Provider
-                  value={{ playerTwoTriangle, setPlayerTwoTriangle }}
+                <playerOneTriangleContext.Provider
+                  value={{ playerOneTriangle, setPlayerOneTriangle }}
                 >
-                  <playersReadyContext.Provider
-                    value={{ playersReady, setPlayersReady }}
+                  <playerTwoTriangleContext.Provider
+                    value={{ playerTwoTriangle, setPlayerTwoTriangle }}
                   >
-                    <currentUsersContext.Provider
-                      value={{ currentUsers, setCurrentUsers }}
+                    <playersReadyContext.Provider
+                      value={{ playersReady, setPlayersReady }}
                     >
-                      <playerOneHandContext.Provider
-                        value={{ playerOneHand, setPlayerOneHand }}
+                      <currentUsersContext.Provider
+                        value={{ currentUsers, setCurrentUsers }}
                       >
-                        <playerTwoHandContext.Provider
-                          value={{ playerTwoHand, setPlayerTwoHand }}
+                        <playerOneHandContext.Provider
+                          value={{ playerOneHand, setPlayerOneHand }}
                         >
-                          <thisUserContext.Provider
-                            value={{ thisUser, setThisUser }}
+                          <playerTwoHandContext.Provider
+                            value={{ playerTwoHand, setPlayerTwoHand }}
                           >
-                            <div className="App">
-                              <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
-                              {isConnected ? (
-                                <section>
-                                  <Home
-                                    isPlayingGame={isPlayingGame}
-                                    setIsPlayingGame={setIsPlayingGame}
-                                  />
-                                  <p
-                                    style={{
-                                      fontSize: 10,
-                                      margin: "auto",
-                                      textAlign: "center",
-                                      marginTop: "80vw",
-                                    }}
-                                  >
-                                    is connected {socket.id}
-                                  </p>
-                                </section>
-                              ) : (
-                                <h5>connecting...</h5>
-                              )}
-                            </div>
-                          </thisUserContext.Provider>
-                        </playerTwoHandContext.Provider>
-                      </playerOneHandContext.Provider>
-                    </currentUsersContext.Provider>
-                  </playersReadyContext.Provider>
-                </playerTwoTriangleContext.Provider>
-              </playerOneTriangleContext.Provider>
-            </selectedCardContext.Provider>
-          </currentTurnContext.Provider>
-        </cardInBattleContext.Provider>
-      </globalDeckContext.Provider>
-    </gamePrepLoadingContext.Provider>
+                            <thisUserContext.Provider
+                              value={{ thisUser, setThisUser }}
+                            >
+                              <div className="App">
+                                <h2 style={{ fontSize: 20 }}>{thisUser}</h2>
+                                {isConnected ? (
+                                  <section>
+                                    <Home
+                                      isPlayingGame={isPlayingGame}
+                                      setIsPlayingGame={setIsPlayingGame}
+                                    />
+                                    <p
+                                      style={{
+                                        fontSize: 10,
+                                        margin: "auto",
+                                        textAlign: "center",
+                                        marginTop: "80vw",
+                                      }}
+                                    >
+                                      is connected {socket.id}
+                                    </p>
+                                  </section>
+                                ) : (
+                                  <h5>connecting...</h5>
+                                )}
+                              </div>
+                            </thisUserContext.Provider>
+                          </playerTwoHandContext.Provider>
+                        </playerOneHandContext.Provider>
+                      </currentUsersContext.Provider>
+                    </playersReadyContext.Provider>
+                  </playerTwoTriangleContext.Provider>
+                </playerOneTriangleContext.Provider>
+              </selectedCardContext.Provider>
+            </currentTurnContext.Provider>
+          </cardInBattleContext.Provider>
+        </globalDeckContext.Provider>
+      </gamePrepLoadingContext.Provider>
+    </playerOneRowsCheckContext.Provider>
   );
 }

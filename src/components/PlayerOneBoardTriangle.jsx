@@ -14,11 +14,23 @@ export const PlayerOneBoardTriangle = () => {
   const [revealed, setRevealed] = useState(
     new Array(playerOneTriangle.length).fill(false)
   );
+  const [isTileGone, setIsTileGone] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
     socket.emit("cardInBattle", selectedCard);
-    let selectedCardVal = parseInt(selectedCard.value);
-    let opposingCardVal = parseInt(opposingCard.value);
+    let selectedCardVal = selectedCard.value;
+    let opposingCardVal = opposingCard.value;
 
     if (selectedCardVal === "JACK") {
       selectedCardVal = 11;
@@ -40,20 +52,31 @@ export const PlayerOneBoardTriangle = () => {
       opposingCardVal = 14;
     }
 
+    let intParsedSelected = parseInt(selectedCardVal);
+    let intParsedOpposing = parseInt(opposingCardVal);
+
     setTimeout(() => {
-      if (selectedCardVal >= opposingCardVal) {
+      if (intParsedSelected >= intParsedOpposing) {
         console.log("card won");
-        if (selectedCardVal > 10) {
+        if (intParsedSelected > 10) {
           socket.emit("playerTwoDiscard", selectedCard);
           socket.emit("playerOneTileDiscard", tileIndex, opposingCard);
         }
-        if (opposingCardVal <= 10) {
+        if (intParsedOpposing <= 10) {
           socket.emit("cardToPlayerTwo", opposingCard);
           socket.emit("playerOneLostTile", tileIndex);
         }
         socket.emit("turnSwitch", currentTurn);
+        if (tileIndex === 9) {
+          socket.emit("gameWon", "playerTwo");
+        }
+        setIsTileGone((previous) => {
+          let arrayCopy = [...previous];
+          arrayCopy[tileIndex] = true;
+          return arrayCopy;
+        });
       } else {
-        if (selectedCardVal > 10) {
+        if (intParsedSelected > 10) {
           socket.emit("playerTwoDiscard", selectedCard);
         } else {
           socket.emit("playerTwoLostCard", selectedCard);
@@ -231,7 +254,9 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[7] &&
+                      isTileGone[8]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
@@ -264,7 +289,10 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[4] &&
+                      isTileGone[5] &&
+                      isTileGone[6]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
@@ -295,7 +323,10 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[4] &&
+                      isTileGone[5] &&
+                      isTileGone[6]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
@@ -328,7 +359,11 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[0] &&
+                      isTileGone[1] &&
+                      isTileGone[2] &&
+                      isTileGone[3]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
@@ -359,7 +394,11 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[0] &&
+                      isTileGone[1] &&
+                      isTileGone[2] &&
+                      isTileGone[3]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
@@ -390,7 +429,11 @@ export const PlayerOneBoardTriangle = () => {
                     if (
                       selectedCard &&
                       thisUser === "playerTwo" &&
-                      currentTurn === "playerTwo"
+                      currentTurn === "playerTwo" &&
+                      isTileGone[0] &&
+                      isTileGone[1] &&
+                      isTileGone[2] &&
+                      isTileGone[3]
                     ) {
                       setRevealed((prev) => {
                         const updatedRevealed = [...prev];
