@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "./socket";
-import { Home } from "./components/Home";
+import { PreLobby } from "./components/PreLobby";
 import { playerOneHandContext } from "./contexts/playerOneHand";
 import { playerTwoHandContext } from "./contexts/playerTwoHand";
 import { thisUserContext } from "./contexts/thisUser";
@@ -16,7 +16,8 @@ import { gamePrepLoadingContext } from "./contexts/gamePrepLoading";
 import { playerOneRowsCheckContext } from "./contexts/playerOneRowsCheck";
 import { opposingCardContext } from "./contexts/opposingCard";
 import { gameOverContext } from "./contexts/gameOver";
-import axios from "axios";
+import { Home } from "./components/Home";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -313,86 +314,93 @@ export default function App() {
   }, []);
 
   return (
-    <gameOverContext.Provider value={{ gameOver, setGameOver }}>
-      <opposingCardContext.Provider value={{ opposingCard, setOpposingCard }}>
-        <playerOneRowsCheckContext.Provider
-          value={{ playerOneRowsCheck, setPlayerOneRowsCheck }}
-        >
-          <gamePrepLoadingContext.Provider
-            value={{ gamePrepLoading, setGamePrepLoading }}
+    <Router>
+      <gameOverContext.Provider value={{ gameOver, setGameOver }}>
+        <opposingCardContext.Provider value={{ opposingCard, setOpposingCard }}>
+          <playerOneRowsCheckContext.Provider
+            value={{ playerOneRowsCheck, setPlayerOneRowsCheck }}
           >
-            <globalDeckContext.Provider value={{ globalDeck, setGlobalDeck }}>
-              <cardInBattleContext.Provider
-                value={{ cardInBattle, setCardInBattle }}
-              >
-                <currentTurnContext.Provider
-                  value={{ currentTurn, setCurrentTurn }}
+            <gamePrepLoadingContext.Provider
+              value={{ gamePrepLoading, setGamePrepLoading }}
+            >
+              <globalDeckContext.Provider value={{ globalDeck, setGlobalDeck }}>
+                <cardInBattleContext.Provider
+                  value={{ cardInBattle, setCardInBattle }}
                 >
-                  <selectedCardContext.Provider
-                    value={{ selectedCard, setSelectedCard }}
+                  <currentTurnContext.Provider
+                    value={{ currentTurn, setCurrentTurn }}
                   >
-                    <playerOneTriangleContext.Provider
-                      value={{ playerOneTriangle, setPlayerOneTriangle }}
+                    <selectedCardContext.Provider
+                      value={{ selectedCard, setSelectedCard }}
                     >
-                      <playerTwoTriangleContext.Provider
-                        value={{ playerTwoTriangle, setPlayerTwoTriangle }}
+                      <playerOneTriangleContext.Provider
+                        value={{ playerOneTriangle, setPlayerOneTriangle }}
                       >
-                        <playersReadyContext.Provider
-                          value={{ playersReady, setPlayersReady }}
+                        <playerTwoTriangleContext.Provider
+                          value={{ playerTwoTriangle, setPlayerTwoTriangle }}
                         >
-                          <currentUsersContext.Provider
-                            value={{ currentUsers, setCurrentUsers }}
+                          <playersReadyContext.Provider
+                            value={{ playersReady, setPlayersReady }}
                           >
-                            <playerOneHandContext.Provider
-                              value={{ playerOneHand, setPlayerOneHand }}
+                            <currentUsersContext.Provider
+                              value={{ currentUsers, setCurrentUsers }}
                             >
-                              <playerTwoHandContext.Provider
-                                value={{ playerTwoHand, setPlayerTwoHand }}
+                              <playerOneHandContext.Provider
+                                value={{ playerOneHand, setPlayerOneHand }}
                               >
-                                <thisUserContext.Provider
-                                  value={{ thisUser, setThisUser }}
+                                <playerTwoHandContext.Provider
+                                  value={{ playerTwoHand, setPlayerTwoHand }}
                                 >
-                                  <div className="App">
-                                    <h2 style={{ fontSize: 20 }}>
-                                      {thisUser === "playerOne"
-                                        ? `player one: ${currentUsers[0]}`
-                                        : `player two: ${currentUsers[1]}`}
-                                    </h2>
-                                    {isConnected ? (
-                                      <section>
-                                        <Home
-                                          isPlayingGame={isPlayingGame}
-                                          setIsPlayingGame={setIsPlayingGame}
-                                        />
-                                        <p
-                                          style={{
-                                            fontSize: 10,
-                                            margin: "auto",
-                                            textAlign: "center",
-                                            marginTop: "80vw",
-                                          }}
-                                        >
-                                          is connected {socket.id}
-                                        </p>
-                                      </section>
-                                    ) : (
-                                      <h5>connecting...</h5>
-                                    )}
-                                  </div>
-                                </thisUserContext.Provider>
-                              </playerTwoHandContext.Provider>
-                            </playerOneHandContext.Provider>
-                          </currentUsersContext.Provider>
-                        </playersReadyContext.Provider>
-                      </playerTwoTriangleContext.Provider>
-                    </playerOneTriangleContext.Provider>
-                  </selectedCardContext.Provider>
-                </currentTurnContext.Provider>
-              </cardInBattleContext.Provider>
-            </globalDeckContext.Provider>
-          </gamePrepLoadingContext.Provider>
-        </playerOneRowsCheckContext.Provider>
-      </opposingCardContext.Provider>
-    </gameOverContext.Provider>
+                                  <thisUserContext.Provider
+                                    value={{ thisUser, setThisUser }}
+                                  >
+                                    {/* <div className="App">
+                                      <h2 style={{ fontSize: 20 }}>
+                                        {thisUser === "playerOne"
+                                          ? `player one: ${currentUsers[0]}`
+                                          : `player two: ${currentUsers[1]}`}
+                                      </h2>
+                                      {isConnected ? (
+                                        <section>
+                                          <Home
+                                            isPlayingGame={isPlayingGame}
+                                            setIsPlayingGame={setIsPlayingGame}
+                                          />
+                                          <p
+                                            style={{
+                                              fontSize: 10,
+                                              margin: "auto",
+                                              textAlign: "center",
+                                              marginTop: "80vw",
+                                            }}
+                                          >
+                                            is connected {socket.id}
+                                          </p>
+                                        </section>
+                                      ) : (
+                                        <h5>connecting...</h5>
+                                      )}
+                                    </div> */}
+                                    <Switch>
+                                      <Route path="/">
+                                        <Home />
+                                      </Route>
+                                    </Switch>
+                                  </thisUserContext.Provider>
+                                </playerTwoHandContext.Provider>
+                              </playerOneHandContext.Provider>
+                            </currentUsersContext.Provider>
+                          </playersReadyContext.Provider>
+                        </playerTwoTriangleContext.Provider>
+                      </playerOneTriangleContext.Provider>
+                    </selectedCardContext.Provider>
+                  </currentTurnContext.Provider>
+                </cardInBattleContext.Provider>
+              </globalDeckContext.Provider>
+            </gamePrepLoadingContext.Provider>
+          </playerOneRowsCheckContext.Provider>
+        </opposingCardContext.Provider>
+      </gameOverContext.Provider>
+    </Router>
   );
 }
