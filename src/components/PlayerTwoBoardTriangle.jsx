@@ -34,6 +34,8 @@ export const PlayerTwoBoardTriangle = () => {
     let selectedCardVal = selectedCard.value;
     let opposingCardVal = opposingCard.value;
 
+    let aceLoss = false;
+
     if (selectedCardVal === "JACK") {
       selectedCardVal = 11;
     } else if (selectedCardVal === "QUEEN") {
@@ -57,8 +59,15 @@ export const PlayerTwoBoardTriangle = () => {
     let intParsedSelected = parseInt(selectedCardVal);
     let intParsedOpposing = parseInt(opposingCardVal);
 
+    if (intParsedOpposing === 14) {
+      let aceSuit = opposingCard.suit;
+      if (intParsedSelected > 10 && selectedCard.suit === aceSuit) {
+        aceLoss = true;
+      }
+    }
+
     setTimeout(() => {
-      if (intParsedSelected >= intParsedOpposing) {
+      if (intParsedSelected >= intParsedOpposing || aceLoss) {
         console.log("card won");
         if (intParsedSelected > 10) {
           socket.emit("playerOneDiscard", selectedCard);
