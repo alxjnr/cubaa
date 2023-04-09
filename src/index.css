@@ -34,7 +34,7 @@ code {
 
 .lobby-users-list {
   background-color: beige;
-  height: 50vw;
+  height: auto;
 }
 
 .card-hand {

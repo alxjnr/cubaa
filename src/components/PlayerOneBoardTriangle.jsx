@@ -5,6 +5,7 @@ import { selectedCardContext } from "../contexts/selectedCard";
 import { socket } from "../socket";
 import { currentTurnContext } from "../contexts/currentTurn";
 import { opposingCardContext } from "../contexts/opposingCard";
+import { currentUsersContext } from "../contexts/currentUsers";
 
 export const PlayerOneBoardTriangle = () => {
   const { playerOneTriangle } = useContext(playerOneTriangleContext);
@@ -12,6 +13,7 @@ export const PlayerOneBoardTriangle = () => {
   const { selectedCard } = useContext(selectedCardContext);
   const { currentTurn } = useContext(currentTurnContext);
   const { opposingCard } = useContext(opposingCardContext);
+  const { currentUsers } = useContext(currentUsersContext);
 
   const [revealed, setRevealed] = useState(
     new Array(playerOneTriangle.length).fill(false)
@@ -80,7 +82,7 @@ export const PlayerOneBoardTriangle = () => {
         }
         socket.emit("turnSwitch", currentTurn);
         if (tileIndex === 9) {
-          socket.emit("gameWon", "playerTwo");
+          socket.emit("gameWon", currentUsers[1]);
         }
         setIsTileGone((previous) => {
           let arrayCopy = [...previous];

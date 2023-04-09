@@ -7,12 +7,15 @@ import { PlayerTwoBoardHand } from "./PlayerTwoBoardHand";
 import { PlayerOneBoardTriangle } from "./PlayerOneBoardTriangle";
 import { PlayerTwoBoardTriangle } from "./PlayerTwoBoardTriangle";
 import { selectedCardContext } from "../contexts/selectedCard";
+import { gameOverContext } from "../contexts/gameOver";
 import { MainDeck } from "./MainDeck";
+import { GameOverScreen } from "./GameOverScreen";
 
 export const GameBoard = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
   const { playerTwoHand } = useContext(playerTwoHandContext);
   const { thisUser } = useContext(thisUserContext);
+  const { gameOver } = useContext(gameOverContext);
 
   return (
     <section
@@ -23,7 +26,9 @@ export const GameBoard = () => {
       }}
     >
       <section>
-        {thisUser === "playerOne" ? (
+        {gameOver.isOver ? (
+          <section></section>
+        ) : thisUser === "playerOne" ? (
           <section>
             <PlayerTwoBoardHand />
             <PlayerTwoBoardTriangle />
@@ -39,9 +44,7 @@ export const GameBoard = () => {
           </section>
         )}
       </section>
-      <section>
-        <MainDeck />
-      </section>
+      <section>{gameOver.isOver ? <GameOverScreen /> : <MainDeck />}</section>
     </section>
   );
 };
