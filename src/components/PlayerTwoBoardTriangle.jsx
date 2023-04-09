@@ -5,6 +5,7 @@ import { selectedCardContext } from "../contexts/selectedCard";
 import { socket } from "../socket";
 import { currentTurnContext } from "../contexts/currentTurn";
 import { cardInBattleContext } from "../contexts/cardInBattle";
+import { opposingCardContext } from "../contexts/opposingCard";
 
 export const PlayerTwoBoardTriangle = () => {
   const { playerTwoTriangle } = useContext(playerTwoTriangleContext);
@@ -12,6 +13,7 @@ export const PlayerTwoBoardTriangle = () => {
   const { selectedCard } = useContext(selectedCardContext);
   const { currentTurn } = useContext(currentTurnContext);
   const { cardInBattle } = useContext(cardInBattleContext);
+  const { opposingCard } = useContext(opposingCardContext);
 
   const [revealed, setRevealed] = useState(
     new Array(playerTwoTriangle.length).fill(false)
@@ -31,6 +33,7 @@ export const PlayerTwoBoardTriangle = () => {
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
     socket.emit("cardInBattle", selectedCard);
+    socket.emit("opposingCardHighlight", opposingCard);
     let selectedCardVal = selectedCard.value;
     let opposingCardVal = opposingCard.value;
 
@@ -104,140 +107,220 @@ export const PlayerTwoBoardTriangle = () => {
         <section>
           <section className="player-one-board-one">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[0].code}
-                alt={playerTwoTriangle[0].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[0].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[0] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[0].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[0].code}
+                  alt={playerTwoTriangle[0].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[0].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[1].code}
-                alt={playerTwoTriangle[1].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[1].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[1] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[1].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[1].code}
+                  alt={playerTwoTriangle[1].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[1].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[2].code}
-                alt={playerTwoTriangle[2].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[2].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[2] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[2].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[2].code}
+                  alt={playerTwoTriangle[2].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[2].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[3].code}
-                alt={playerTwoTriangle[3].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[3].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[3] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[3].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[3].code}
+                  alt={playerTwoTriangle[3].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[3].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-two">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[4].code}
-                alt={playerTwoTriangle[4].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[4].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[4] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[4].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[4].code}
+                  alt={playerTwoTriangle[4].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[4].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[5].code}
-                alt={playerTwoTriangle[5].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[5].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[5] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[5].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[5].code}
+                  alt={playerTwoTriangle[5].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[5].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[6].code}
-                alt={playerTwoTriangle[6].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[6].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[6] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[6].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[6].code}
+                  alt={playerTwoTriangle[6].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[6].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-three">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[7].code}
-                alt={playerTwoTriangle[7].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[7].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[7] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[7].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[7].code}
+                  alt={playerTwoTriangle[7].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[7].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[8].code}
-                alt={playerTwoTriangle[8].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[8].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[8] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[8].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[8].code}
+                  alt={playerTwoTriangle[8].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[8].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
           </section>
           <section className="player-one-board-four">
             <section className="player-one-square">
-              <img
-                className="card-on-board"
-                key={playerTwoTriangle[9].code}
-                alt={playerTwoTriangle[9].code}
-                src={
-                  thisUser === "playerTwo"
-                    ? playerTwoTriangle[9].image
-                    : "/images/back-of-card.png"
-                }
-                style={{ width: "50px" }}
-              />
+              {playerTwoTriangle[9] === false ? (
+                <section className="card-on-board"></section>
+              ) : (
+                <img
+                  className={
+                    opposingCard.code === playerTwoTriangle[9].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
+                  key={playerTwoTriangle[9].code}
+                  alt={playerTwoTriangle[9].code}
+                  src={
+                    thisUser === "playerTwo"
+                      ? playerTwoTriangle[9].image
+                      : "/images/back-of-card.png"
+                  }
+                  style={{ width: "50px" }}
+                />
+              )}
             </section>
           </section>
         </section>
@@ -246,10 +329,14 @@ export const PlayerTwoBoardTriangle = () => {
           <section className="player-one-board-four">
             <section className="player-one-square">
               {playerTwoTriangle[9] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[9].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[9].code}
                   alt={playerTwoTriangle[9].code}
                   src={
@@ -281,10 +368,14 @@ export const PlayerTwoBoardTriangle = () => {
           <section className="player-one-board-three">
             <section className="player-one-square">
               {playerTwoTriangle[7] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[7].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[7].code}
                   alt={playerTwoTriangle[7].code}
                   src={
@@ -315,10 +406,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[8] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[8].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[8].code}
                   alt={playerTwoTriangle[8].code}
                   src={
@@ -351,10 +446,14 @@ export const PlayerTwoBoardTriangle = () => {
           <section className="player-one-board-two">
             <section className="player-one-square">
               {playerTwoTriangle[4] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[4].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[4].code}
                   alt={playerTwoTriangle[4].code}
                   src={
@@ -386,10 +485,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[5] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[5].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[5].code}
                   alt={playerTwoTriangle[5].code}
                   src={
@@ -421,10 +524,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[6] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[6].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[6].code}
                   alt={playerTwoTriangle[6].code}
                   src={
@@ -458,10 +565,14 @@ export const PlayerTwoBoardTriangle = () => {
           <section className="player-one-board-one">
             <section className="player-one-square">
               {playerTwoTriangle[0] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[0].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[0].code}
                   alt={playerTwoTriangle[0].code}
                   src={
@@ -489,10 +600,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[1] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[1].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[1].code}
                   alt={playerTwoTriangle[1].code}
                   src={
@@ -520,10 +635,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[2] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[2].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[2].code}
                   alt={playerTwoTriangle[2].code}
                   src={
@@ -551,10 +670,14 @@ export const PlayerTwoBoardTriangle = () => {
             </section>
             <section className="player-one-square">
               {playerTwoTriangle[3] === false ? (
-                <section></section>
+                <section className="card-on-board"></section>
               ) : (
                 <img
-                  className="card-on-board"
+                  className={
+                    opposingCard.code === playerTwoTriangle[3].code
+                      ? "card-on-board-highlighted"
+                      : "card-on-board"
+                  }
                   key={playerTwoTriangle[3].code}
                   alt={playerTwoTriangle[3].code}
                   src={

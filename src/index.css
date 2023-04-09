@@ -61,8 +61,8 @@ code {
 
 .player-one-board {
   margin: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   width: 50vw;
 }
 
@@ -73,7 +73,7 @@ code {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .player-one-square {
@@ -88,6 +88,18 @@ code {
   transition: 200ms;
 }
 
+.card-on-board-highlighted {
+  transition: 200ms;
+  border: solid gold 1px;
+  box-sizing: border-box;
+  animation: glowing-border 1.5s ease-in-out infinite;
+}
+
+.card-on-board-highlighted:hover {
+  z-index: 3;
+  transform: scale(1.5);
+}
+
 .card-on-board:hover {
   z-index: 3;
   transform: scale(1.5);
@@ -99,6 +111,13 @@ code {
   animation: glowing-border 1.5s ease-in-out infinite;
 }
 
+.card-on-board-in-battle-p1 {
+  transform: translateY(-100px);
+}
+
+.card-on-board-in-battle-p2 {
+  transform: translateY(100px);
+}
 @keyframes glowing-border {
   0% {
     box-shadow: 0 0 10px gold;

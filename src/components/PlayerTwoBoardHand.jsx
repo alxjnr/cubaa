@@ -16,7 +16,11 @@ export const PlayerTwoBoardHand = () => {
         return (
           <img
             className={
-              selectedCard === card ? "card-on-board-selected" : "card-on-board"
+              card.code === cardInBattle.code
+                ? "card-on-board-in-battle-p1"
+                : selectedCard === card
+                ? "card-on-board-selected"
+                : "card-on-board"
             }
             key={card.code}
             alt={card.code}
@@ -25,6 +29,14 @@ export const PlayerTwoBoardHand = () => {
                 ? card.image
                 : "/images/back-of-card.png"
             }
+            style={{
+              transform:
+                card.code === cardInBattle.code
+                  ? thisUser === "playerOne"
+                    ? "translateY(100px)"
+                    : "translateY(-100px)"
+                  : "",
+            }}
             onClick={() => {
               setSelectedCard(card);
             }}
