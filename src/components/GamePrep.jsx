@@ -43,8 +43,16 @@ export const GamePrep = () => {
     }
   };
 
+  const returnToPlayer = (card) => {
+    if (thisUser === "playerOne") {
+      socket.emit("cardToPlayerOne", card);
+    } else if (thisUser === "playerTwo") {
+      socket.emit("cardToPlayerTwo", card);
+    }
+  };
+
   const playerReady = () => {
-    socket.emit("playerReady", thisUser);
+    if (squaresArr) socket.emit("playerReady", thisUser);
   };
 
   const setTriangle = () => {
@@ -103,6 +111,14 @@ export const GamePrep = () => {
                     alt={squaresArr[0].code}
                     src={squaresArr[0].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[0]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[0] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -131,6 +147,14 @@ export const GamePrep = () => {
                     alt={squaresArr[1].code}
                     src={squaresArr[1].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[1]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[1] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -159,6 +183,14 @@ export const GamePrep = () => {
                     alt={squaresArr[2].code}
                     src={squaresArr[2].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[2]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[2] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -187,6 +219,14 @@ export const GamePrep = () => {
                     alt={squaresArr[3].code}
                     src={squaresArr[3].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[3]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[3] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -217,6 +257,14 @@ export const GamePrep = () => {
                     alt={squaresArr[4].code}
                     src={squaresArr[4].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[4]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[4] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -245,6 +293,14 @@ export const GamePrep = () => {
                     alt={squaresArr[5].code}
                     src={squaresArr[5].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[5]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[5] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -273,6 +329,14 @@ export const GamePrep = () => {
                     alt={squaresArr[6].code}
                     src={squaresArr[6].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[6]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[6] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -303,6 +367,14 @@ export const GamePrep = () => {
                     alt={squaresArr[7].code}
                     src={squaresArr[7].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[7]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[7] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -331,6 +403,14 @@ export const GamePrep = () => {
                     alt={squaresArr[8].code}
                     src={squaresArr[8].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[8]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[8] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
@@ -361,6 +441,14 @@ export const GamePrep = () => {
                     alt={squaresArr[9].code}
                     src={squaresArr[9].image}
                     style={{ width: "50px" }}
+                    onClick={() => {
+                      returnToPlayer(squaresArr[9]);
+                      setSquaresArr((current) => {
+                        const updatedArr = [...current];
+                        updatedArr[9] = null;
+                        return updatedArr;
+                      });
+                    }}
                   />
                 )}
               </section>
