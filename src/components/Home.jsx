@@ -12,6 +12,10 @@ export const Home = ({ isPlayingGame, setIsPlayingGame }) => {
   const [signedUp, setSignedUp] = useState(false);
 
   const handleSubmit = () => {
+    // const roomId = "12345";
+    // const currentUrl = window.location.href;
+    // const newUrl = `${currentUrl}?room=${roomId}`;
+    // window.history.pushState({ path: newUrl }, "", newUrl);
     socket.emit("addUserToLobby", input);
     setInput("");
     setSignedUp(true);
