@@ -17,26 +17,26 @@ export const PlayerOneBoardTriangle = () => {
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
     socket.emit("cardInBattle", selectedCard);
-    let selectedCardVal = selectedCard.code[0];
-    let opposingCardVal = opposingCard.code[0];
+    let selectedCardVal = parseInt(selectedCard.value);
+    let opposingCardVal = parseInt(opposingCard.value);
 
-    if (selectedCardVal === "J") {
+    if (selectedCardVal === "JACK") {
       selectedCardVal = 11;
-    } else if (selectedCardVal === "Q") {
+    } else if (selectedCardVal === "QUEEN") {
       selectedCardVal = 12;
-    } else if (selectedCardVal === "K") {
+    } else if (selectedCardVal === "KING") {
       selectedCardVal = 13;
-    } else if (selectedCardVal === "A") {
+    } else if (selectedCardVal === "ACE") {
       selectedCardVal = 14;
     }
 
-    if (opposingCardVal === "J") {
+    if (opposingCardVal === "JACK") {
       opposingCardVal = 11;
-    } else if (opposingCardVal === "Q") {
+    } else if (opposingCardVal === "QUEEN") {
       opposingCardVal = 12;
-    } else if (opposingCardVal === "K") {
+    } else if (opposingCardVal === "KING") {
       opposingCardVal = 13;
-    } else if (opposingCardVal === "A") {
+    } else if (opposingCardVal === "ACE") {
       opposingCardVal = 14;
     }
 
