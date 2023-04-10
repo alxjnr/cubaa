@@ -9,6 +9,7 @@ import { GameBoard } from "./GameBoard";
 import { selectedCardContext } from "../contexts/selectedCard";
 import { gamePrepLoadingContext } from "../contexts/gamePrepLoading";
 import { roomIdContext } from "../contexts/roomId";
+import { readyCountdownContext } from "../contexts/readyCountdown";
 
 export const GamePrep = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
@@ -16,12 +17,15 @@ export const GamePrep = () => {
   const { playersReady } = useContext(playersReadyContext);
   const { thisUser } = useContext(thisUserContext);
   const { roomId } = useContext(roomIdContext);
+  const [localReady, setLocalReady] = useState(false);
+  const { readyCountdown } = useContext(readyCountdownContext);
 
   // const [selectedCard, setSelectedCard] = useState({});
   const { selectedCard, setSelectedCard } = useContext(selectedCardContext);
 
   const { gamePrepLoading } = useContext(gamePrepLoadingContext);
   const [squaresArr, setSquaresArr] = useState([]);
+  const [squaresWarning, setSquaresWarning] = useState("");
   // const [cardHighlighted, setCardHighlighted] = useState(false);
 
   const drawToPlayer = (cards) => {
@@ -55,6 +59,7 @@ export const GamePrep = () => {
   };
 
   const playerReady = () => {
+    setLocalReady(true);
     if (squaresArr) socket.emit("playerReady", thisUser, roomId);
   };
 
@@ -494,15 +499,53 @@ export const GamePrep = () => {
                   );
                 })}
           </section>
-          <button
-            style={{ marginTop: "10px" }}
-            onClick={() => {
-              playerReady();
-              setTriangle();
+          <section
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "50px",
             }}
           >
-            ready
-          </button>
+            <button
+              style={{ marginTop: "10px" }}
+              onClick={() => {
+                if (
+                  squaresArr[0] &&
+                  squaresArr[1] &&
+                  squaresArr[2] &&
+                  squaresArr[3] &&
+                  squaresArr[4] &&
+                  squaresArr[5] &&
+                  squaresArr[6] &&
+                  squaresArr[7] &&
+                  squaresArr[8] &&
+                  squaresArr[9]
+                ) {
+                  playerReady();
+                  setTriangle();
+                  setSquaresWarning("");
+                } else {
+                  setSquaresWarning(
+                    "all spaces of the triangle must be filled"
+                  );
+                }
+              }}
+              disabled={localReady}
+            >
+              ready
+            </button>
+          </section>
+          <section style={{ display: "flex", justifyContent: "center" }}>
+            <h5>{squaresWarning}</h5>
+            {localReady ? (
+              <h5>
+                {readyCountdown !== "" ? "" : "your cards are now sealed"}
+              </h5>
+            ) : (
+              <section></section>
+            )}
+            <h2>{readyCountdown}</h2>
+          </section>
         </section>
       )}
     </section>

@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from "./components/Home";
 import { PreLobby } from "./components/PreLobby";
+import { About } from "./components/About";
+import { Rules } from "./components/Rules";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,6 +15,8 @@ root.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/game/:room_id" element={<App />} />
+      <Route path="/about" element={<About />} />
+      <Route path="rules" element={<Rules />} />
     </Routes>
   </BrowserRouter>
   // </React.StrictMode>

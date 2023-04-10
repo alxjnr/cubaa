@@ -19,37 +19,29 @@ export const MainDeck = () => {
   return (
     <section
       style={{
-        display: "flex",
-        height: "100vh",
-        alignItems: "center",
+        border: "solid lightgrey 2px",
+        borderRadius: 5,
+        padding: "5px",
+        width: "50px",
+        height: "70px",
       }}
     >
-      <section
-        style={{
-          border: "solid lightgrey 2px",
-          borderRadius: 5,
-          padding: "5px",
-          width: "50px",
-          height: "70px",
-        }}
-      >
-        {globalDeck.length > 0 ? (
-          <img
-            className="card-on-board"
-            key="globalDeck"
-            alt="deck of cards"
-            src={"/images/back-of-card.png"}
-            style={{ width: "50px" }}
-            onClick={() => {
-              if (thisUser === currentTurn) {
-                drawFromPile(thisUser);
-              }
-            }}
-          />
-        ) : (
-          <section></section>
-        )}
-      </section>
+      {globalDeck.length > 0 ? (
+        <img
+          className="card-on-board"
+          key="globalDeck"
+          alt="deck of cards"
+          src={"/images/back-of-card.png"}
+          style={{ width: "50px" }}
+          onClick={() => {
+            if (thisUser === currentTurn) {
+              drawFromPile(thisUser);
+            }
+          }}
+        />
+      ) : (
+        <section></section>
+      )}
     </section>
   );
 };

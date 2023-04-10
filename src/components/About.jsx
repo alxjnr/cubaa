@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-export const Home = () => {
-  const randomString = Math.random().toString(36).substring(2, 12);
 
+export const About = () => {
   return (
     <section>
       <section className="navbar">
@@ -16,9 +15,6 @@ export const Home = () => {
         </button>
       </section>
       <section className="home-page">
-        <button>
-          <Link to={`/game/${randomString}`}>create game</Link>
-        </button>
         <p
           style={{
             textAlign: "center",
@@ -28,13 +24,10 @@ export const Home = () => {
             borderRadius: "5px",
           }}
         >
-          Adamas is a free online card game for two players. Players take turns
-          playing cards from their hands, trying to make their way up the
-          opponent's pyramid. The goal is to reach the top and capture the
-          opponent's last card.<br></br>
-          <br></br>
-          Click 'create game' to create a game, then copy the URL and send it to
-          a friend to enter the lobby.
+          game created by{" "}
+          <a style={{ color: "blue" }} href="https://github.com/alxjnr">
+            alxjnr
+          </a>
         </p>
       </section>
     </section>

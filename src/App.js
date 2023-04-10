@@ -18,6 +18,7 @@ import { opposingCardContext } from "./contexts/opposingCard";
 import { gameOverContext } from "./contexts/gameOver";
 import { Home } from "./components/Home";
 import { roomIdContext } from "./contexts/roomId";
+import { readyCountdownContext } from "./contexts/readyCountdown";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -52,6 +53,7 @@ export default function App() {
     false,
     false,
   ]);
+  const [readyCountdown, setReadyCountdown] = useState("");
 
   useEffect(() => {
     if (globalDeck.length > 0 && shouldRunEffect) {
@@ -74,12 +76,14 @@ export default function App() {
       setIsConnected(true);
     }
 
-    function onDisconnect() {
+    function onDisconnect(roomId) {
       setIsConnected(false);
+      socket.emit("disconnectRoom", roomId);
     }
 
     socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
+    // socket.on("disconnect", onDisconnect);
+    socket.on("disconnect", () => onDisconnect(roomId));
 
     socket.on("addUserToLobby", (user) => {
       setCurrentUsers((current) => {
@@ -120,6 +124,13 @@ export default function App() {
       }
 
       if (playersReadyObj.playerOneReady && playersReadyObj.playerTwoReady) {
+        setReadyCountdown("3");
+        setTimeout(() => {
+          setReadyCountdown("2");
+        }, 1000);
+        setTimeout(() => {
+          setReadyCountdown("1");
+        }, 2000);
         setTimeout(() => {
           setPlayersReady(true);
         }, 3000);
@@ -315,76 +326,79 @@ export default function App() {
   }, []);
 
   return (
-    <roomIdContext.Provider value={{ roomId, setRoomId }}>
-      <gameOverContext.Provider value={{ gameOver, setGameOver }}>
-        <opposingCardContext.Provider value={{ opposingCard, setOpposingCard }}>
-          <playerOneRowsCheckContext.Provider
-            value={{ playerOneRowsCheck, setPlayerOneRowsCheck }}
+    <readyCountdownContext.Provider
+      value={{ readyCountdown, setReadyCountdown }}
+    >
+      <roomIdContext.Provider value={{ roomId, setRoomId }}>
+        <gameOverContext.Provider value={{ gameOver, setGameOver }}>
+          <opposingCardContext.Provider
+            value={{ opposingCard, setOpposingCard }}
           >
-            <gamePrepLoadingContext.Provider
-              value={{ gamePrepLoading, setGamePrepLoading }}
+            <playerOneRowsCheckContext.Provider
+              value={{ playerOneRowsCheck, setPlayerOneRowsCheck }}
             >
-              <globalDeckContext.Provider value={{ globalDeck, setGlobalDeck }}>
-                <cardInBattleContext.Provider
-                  value={{ cardInBattle, setCardInBattle }}
+              <gamePrepLoadingContext.Provider
+                value={{ gamePrepLoading, setGamePrepLoading }}
+              >
+                <globalDeckContext.Provider
+                  value={{ globalDeck, setGlobalDeck }}
                 >
-                  <currentTurnContext.Provider
-                    value={{ currentTurn, setCurrentTurn }}
+                  <cardInBattleContext.Provider
+                    value={{ cardInBattle, setCardInBattle }}
                   >
-                    <selectedCardContext.Provider
-                      value={{ selectedCard, setSelectedCard }}
+                    <currentTurnContext.Provider
+                      value={{ currentTurn, setCurrentTurn }}
                     >
-                      <playerOneTriangleContext.Provider
-                        value={{ playerOneTriangle, setPlayerOneTriangle }}
+                      <selectedCardContext.Provider
+                        value={{ selectedCard, setSelectedCard }}
                       >
-                        <playerTwoTriangleContext.Provider
-                          value={{ playerTwoTriangle, setPlayerTwoTriangle }}
+                        <playerOneTriangleContext.Provider
+                          value={{ playerOneTriangle, setPlayerOneTriangle }}
                         >
-                          <playersReadyContext.Provider
-                            value={{ playersReady, setPlayersReady }}
+                          <playerTwoTriangleContext.Provider
+                            value={{ playerTwoTriangle, setPlayerTwoTriangle }}
                           >
-                            <currentUsersContext.Provider
-                              value={{ currentUsers, setCurrentUsers }}
+                            <playersReadyContext.Provider
+                              value={{ playersReady, setPlayersReady }}
                             >
-                              <playerOneHandContext.Provider
-                                value={{ playerOneHand, setPlayerOneHand }}
+                              <currentUsersContext.Provider
+                                value={{ currentUsers, setCurrentUsers }}
                               >
-                                <playerTwoHandContext.Provider
-                                  value={{ playerTwoHand, setPlayerTwoHand }}
+                                <playerOneHandContext.Provider
+                                  value={{ playerOneHand, setPlayerOneHand }}
                                 >
-                                  <thisUserContext.Provider
-                                    value={{ thisUser, setThisUser }}
+                                  <playerTwoHandContext.Provider
+                                    value={{ playerTwoHand, setPlayerTwoHand }}
                                   >
-                                    <div className="App">
-                                      <h2 style={{ fontSize: 20 }}>
-                                        {thisUser === "playerOne"
-                                          ? `player one: ${currentUsers[0]}`
-                                          : `player two: ${currentUsers[1]}`}
-                                      </h2>
-                                      {isConnected ? (
-                                        <PreLobby
-                                          socket={socket}
-                                          isPlayingGame={isPlayingGame}
-                                        />
-                                      ) : (
-                                        <h5>connecting...</h5>
-                                      )}
-                                    </div>
-                                  </thisUserContext.Provider>
-                                </playerTwoHandContext.Provider>
-                              </playerOneHandContext.Provider>
-                            </currentUsersContext.Provider>
-                          </playersReadyContext.Provider>
-                        </playerTwoTriangleContext.Provider>
-                      </playerOneTriangleContext.Provider>
-                    </selectedCardContext.Provider>
-                  </currentTurnContext.Provider>
-                </cardInBattleContext.Provider>
-              </globalDeckContext.Provider>
-            </gamePrepLoadingContext.Provider>
-          </playerOneRowsCheckContext.Provider>
-        </opposingCardContext.Provider>
-      </gameOverContext.Provider>
-    </roomIdContext.Provider>
+                                    <thisUserContext.Provider
+                                      value={{ thisUser, setThisUser }}
+                                    >
+                                      <div className="App">
+                                        {isConnected ? (
+                                          <PreLobby
+                                            socket={socket}
+                                            isPlayingGame={isPlayingGame}
+                                          />
+                                        ) : (
+                                          <h5>connecting...</h5>
+                                        )}
+                                      </div>
+                                    </thisUserContext.Provider>
+                                  </playerTwoHandContext.Provider>
+                                </playerOneHandContext.Provider>
+                              </currentUsersContext.Provider>
+                            </playersReadyContext.Provider>
+                          </playerTwoTriangleContext.Provider>
+                        </playerOneTriangleContext.Provider>
+                      </selectedCardContext.Provider>
+                    </currentTurnContext.Provider>
+                  </cardInBattleContext.Provider>
+                </globalDeckContext.Provider>
+              </gamePrepLoadingContext.Provider>
+            </playerOneRowsCheckContext.Provider>
+          </opposingCardContext.Provider>
+        </gameOverContext.Provider>
+      </roomIdContext.Provider>
+    </readyCountdownContext.Provider>
   );
 }

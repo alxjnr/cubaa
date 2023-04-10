@@ -5,6 +5,7 @@ import { currentUsersContext } from "../contexts/currentUsers";
 import { thisUserContext } from "../contexts/thisUser";
 import { useLocation, useParams } from "react-router-dom";
 import { roomIdContext } from "../contexts/roomId";
+import { Link } from "react-router-dom";
 
 export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
   const { currentUsers } = useContext(currentUsersContext);
@@ -33,20 +34,46 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
     }
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href);
+  };
+
   return (
     <section className="home-container">
       {!signedUp ? (
         <section>
+          <section className="navbar">
+            <button>
+              <Link to="/">home</Link>
+            </button>
+            <button>
+              <Link to="/rules">rules</Link>
+            </button>
+            <button>
+              <Link to="/about">about</Link>
+            </button>
+          </section>
           <section className="nickname-form">
             <input
+              style={{ textAlign: "center" }}
               placeholder="nickname..."
               onChange={(event) => {
                 setInput(event.target.value);
               }}
             ></input>
-            <button onClick={handleSubmit}>submit</button>
+            <button onClick={handleSubmit} disabled={!input}>
+              enter lobby
+            </button>
           </section>
-          <p>{socket.id} connected</p>
+          <section className="nickname-form">
+            <input
+              type="text"
+              value={window.location.href}
+              readOnly
+              style={{ textAlign: "center", width: "45vw" }}
+            />
+            <button onClick={handleCopy}>Copy</button>
+          </section>
         </section>
       ) : (
         <section>
