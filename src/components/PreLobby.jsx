@@ -1,22 +1,28 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Lobby } from "./Lobby";
 import { socket } from "../socket";
 import { currentUsersContext } from "../contexts/currentUsers";
 import { thisUserContext } from "../contexts/thisUser";
+import { useLocation, useParams } from "react-router-dom";
+import { roomIdContext } from "../contexts/roomId";
 
-export const PreLobby = ({ isPlayingGame, setIsPlayingGame }) => {
+export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
   const { currentUsers } = useContext(currentUsersContext);
   const { thisUser, setThisUser } = useContext(thisUserContext);
+  const { roomId, setRoomId } = useContext(roomIdContext);
 
   const [input, setInput] = useState("");
   const [signedUp, setSignedUp] = useState(false);
 
+  const { room_id } = useParams();
+
+  useEffect(() => {
+    setRoomId(room_id);
+    socket.emit("createRoom", room_id);
+  }, []);
+
   const handleSubmit = () => {
-    // const roomId = "12345";
-    // const currentUrl = window.location.href;
-    // const newUrl = `${currentUrl}?room=${roomId}`;
-    // window.history.pushState({ path: newUrl }, "", newUrl);
-    socket.emit("addUserToLobby", input);
+    socket.emit("addUserToLobby", input, roomId);
     setInput("");
     setSignedUp(true);
 
@@ -30,14 +36,17 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame }) => {
   return (
     <section className="home-container">
       {!signedUp ? (
-        <section className="nickname-form">
-          <input
-            placeholder="nickname..."
-            onChange={(event) => {
-              setInput(event.target.value);
-            }}
-          ></input>
-          <button onClick={handleSubmit}>submit</button>
+        <section>
+          <section className="nickname-form">
+            <input
+              placeholder="nickname..."
+              onChange={(event) => {
+                setInput(event.target.value);
+              }}
+            ></input>
+            <button onClick={handleSubmit}>submit</button>
+          </section>
+          <p>{socket.id} connected</p>
         </section>
       ) : (
         <section>

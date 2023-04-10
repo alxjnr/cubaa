@@ -17,11 +17,12 @@ import { playerOneRowsCheckContext } from "./contexts/playerOneRowsCheck";
 import { opposingCardContext } from "./contexts/opposingCard";
 import { gameOverContext } from "./contexts/gameOver";
 import { Home } from "./components/Home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { roomIdContext } from "./contexts/roomId";
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isPlayingGame, setIsPlayingGame] = useState(false);
+  const [roomId, setRoomId] = useState("");
 
   const [playerOneHand, setPlayerOneHand] = useState([]);
   const [playerTwoHand, setPlayerTwoHand] = useState([]);
@@ -68,7 +69,7 @@ export default function App() {
   }, [globalDeck, shouldRunEffect]);
 
   useEffect(() => {
-    console.log("rendering");
+    console.log("primary useEffect rendering");
     function onConnect() {
       setIsConnected(true);
     }
@@ -314,7 +315,7 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
+    <roomIdContext.Provider value={{ roomId, setRoomId }}>
       <gameOverContext.Provider value={{ gameOver, setGameOver }}>
         <opposingCardContext.Provider value={{ opposingCard, setOpposingCard }}>
           <playerOneRowsCheckContext.Provider
@@ -354,38 +355,21 @@ export default function App() {
                                   <thisUserContext.Provider
                                     value={{ thisUser, setThisUser }}
                                   >
-                                    {/* <div className="App">
+                                    <div className="App">
                                       <h2 style={{ fontSize: 20 }}>
                                         {thisUser === "playerOne"
                                           ? `player one: ${currentUsers[0]}`
                                           : `player two: ${currentUsers[1]}`}
                                       </h2>
                                       {isConnected ? (
-                                        <section>
-                                          <Home
-                                            isPlayingGame={isPlayingGame}
-                                            setIsPlayingGame={setIsPlayingGame}
-                                          />
-                                          <p
-                                            style={{
-                                              fontSize: 10,
-                                              margin: "auto",
-                                              textAlign: "center",
-                                              marginTop: "80vw",
-                                            }}
-                                          >
-                                            is connected {socket.id}
-                                          </p>
-                                        </section>
+                                        <PreLobby
+                                          socket={socket}
+                                          isPlayingGame={isPlayingGame}
+                                        />
                                       ) : (
                                         <h5>connecting...</h5>
                                       )}
-                                    </div> */}
-                                    <Switch>
-                                      <Route path="/">
-                                        <Home />
-                                      </Route>
-                                    </Switch>
+                                    </div>
                                   </thisUserContext.Provider>
                                 </playerTwoHandContext.Provider>
                               </playerOneHandContext.Provider>
@@ -401,6 +385,6 @@ export default function App() {
           </playerOneRowsCheckContext.Provider>
         </opposingCardContext.Provider>
       </gameOverContext.Provider>
-    </Router>
+    </roomIdContext.Provider>
   );
 }

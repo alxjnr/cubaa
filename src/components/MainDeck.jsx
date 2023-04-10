@@ -3,15 +3,17 @@ import { globalDeckContext } from "../contexts/globalDeck";
 import { socket } from "../socket";
 import { thisUserContext } from "../contexts/thisUser";
 import { currentTurnContext } from "../contexts/currentTurn";
+import { roomIdContext } from "../contexts/roomId";
 
 export const MainDeck = () => {
   const { globalDeck } = useContext(globalDeckContext);
   const { thisUser } = useContext(thisUserContext);
   const { currentTurn } = useContext(currentTurnContext);
+  const { roomId } = useContext(roomIdContext);
 
   const drawFromPile = (user) => {
-    socket.emit("drawFromPile", user);
-    socket.emit("turnSwitch", thisUser);
+    socket.emit("drawFromPile", user, roomId);
+    socket.emit("turnSwitch", thisUser, roomId);
   };
 
   return (

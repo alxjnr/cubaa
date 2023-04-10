@@ -6,6 +6,7 @@ import { socket } from "../socket";
 import { currentTurnContext } from "../contexts/currentTurn";
 import { opposingCardContext } from "../contexts/opposingCard";
 import { currentUsersContext } from "../contexts/currentUsers";
+import { roomIdContext } from "../contexts/roomId";
 
 export const PlayerOneBoardTriangle = () => {
   const { playerOneTriangle } = useContext(playerOneTriangleContext);
@@ -14,6 +15,7 @@ export const PlayerOneBoardTriangle = () => {
   const { currentTurn } = useContext(currentTurnContext);
   const { opposingCard } = useContext(opposingCardContext);
   const { currentUsers } = useContext(currentUsersContext);
+  const { roomId } = useContext(roomIdContext);
 
   const [revealed, setRevealed] = useState(
     new Array(playerOneTriangle.length).fill(false)
@@ -32,8 +34,8 @@ export const PlayerOneBoardTriangle = () => {
   ]);
 
   const handleBattle = (selectedCard, opposingCard, tileIndex) => {
-    socket.emit("cardInBattle", selectedCard);
-    socket.emit("opposingCardHighlight", opposingCard);
+    socket.emit("cardInBattle", selectedCard, roomId);
+    socket.emit("opposingCardHighlight", opposingCard, roomId);
     let selectedCardVal = selectedCard.value;
     let opposingCardVal = opposingCard.value;
 
@@ -73,16 +75,16 @@ export const PlayerOneBoardTriangle = () => {
       if (intParsedSelected >= intParsedOpposing || aceLoss) {
         console.log("card won");
         if (intParsedSelected > 10) {
-          socket.emit("playerTwoDiscard", selectedCard);
-          socket.emit("playerOneTileDiscard", tileIndex, opposingCard);
+          socket.emit("playerTwoDiscard", selectedCard, roomId);
+          socket.emit("playerOneTileDiscard", tileIndex, opposingCard, roomId);
         }
         if (intParsedOpposing <= 10) {
-          socket.emit("cardToPlayerTwo", opposingCard);
-          socket.emit("playerOneLostTile", tileIndex);
+          socket.emit("cardToPlayerTwo", opposingCard, roomId);
+          socket.emit("playerOneLostTile", tileIndex, roomId);
         }
-        socket.emit("turnSwitch", currentTurn);
+        socket.emit("turnSwitch", currentTurn, roomId);
         if (tileIndex === 9) {
-          socket.emit("gameWon", currentUsers[1]);
+          socket.emit("gameWon", currentUsers[1], roomId);
         }
         setIsTileGone((previous) => {
           let arrayCopy = [...previous];
@@ -91,12 +93,12 @@ export const PlayerOneBoardTriangle = () => {
         });
       } else {
         if (intParsedSelected > 10) {
-          socket.emit("playerTwoDiscard", selectedCard);
+          socket.emit("playerTwoDiscard", selectedCard, roomId);
         } else {
-          socket.emit("playerTwoLostCard", selectedCard);
-          socket.emit("cardToPlayerOne", selectedCard);
+          socket.emit("playerTwoLostCard", selectedCard, roomId);
+          socket.emit("cardToPlayerOne", selectedCard, roomId);
         }
-        socket.emit("turnSwitch", currentTurn);
+        socket.emit("turnSwitch", currentTurn, roomId);
       }
     }, 2000);
   };
