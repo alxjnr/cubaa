@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/whisq-app/static/css/main.d29ffbaf.css",
-    "main.js": "/whisq-app/static/js/main.171730df.js",
-    "static/js/787.bb8ecda2.chunk.js": "/whisq-app/static/js/787.bb8ecda2.chunk.js",
-    "index.html": "/whisq-app/index.html",
-    "main.d29ffbaf.css.map": "/whisq-app/static/css/main.d29ffbaf.css.map",
-    "main.171730df.js.map": "/whisq-app/static/js/main.171730df.js.map",
-    "787.bb8ecda2.chunk.js.map": "/whisq-app/static/js/787.bb8ecda2.chunk.js.map"
+    "main.css": "/static/css/main.d29ffbaf.css",
+    "main.js": "/static/js/main.bb1256e1.js",
+    "static/js/787.bb8ecda2.chunk.js": "/static/js/787.bb8ecda2.chunk.js",
+    "index.html": "/index.html",
+    "main.d29ffbaf.css.map": "/static/css/main.d29ffbaf.css.map",
+    "main.bb1256e1.js.map": "/static/js/main.bb1256e1.js.map",
+    "787.bb8ecda2.chunk.js.map": "/static/js/787.bb8ecda2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d29ffbaf.css",
-    "static/js/main.171730df.js"
+    "static/js/main.bb1256e1.js"
   ]
 }
