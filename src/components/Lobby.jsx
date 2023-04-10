@@ -2,14 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { socket } from "../socket";
 import { currentUsersContext } from "../contexts/currentUsers";
 import { GamePrep } from "./GamePrep";
+import { roomIdContext } from "../contexts/roomId";
 
 export const Lobby = ({ isPlayingGame }) => {
   const { currentUsers, setCurrentUsers } = useContext(currentUsersContext);
+  const { roomId } = useContext(roomIdContext);
 
   useEffect(() => {}, []);
 
   const startGame = () => {
-    socket.emit("isPlayingGame");
+    socket.emit("isPlayingGame", roomId);
   };
 
   return (
@@ -38,7 +40,9 @@ export const Lobby = ({ isPlayingGame }) => {
           <button onClick={startGame}>start</button>
         </section>
       ) : (
-        <GamePrep />
+        <section>
+          <GamePrep />
+        </section>
       )}
     </section>
   );

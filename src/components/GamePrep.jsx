@@ -8,12 +8,15 @@ import axios from "axios";
 import { GameBoard } from "./GameBoard";
 import { selectedCardContext } from "../contexts/selectedCard";
 import { gamePrepLoadingContext } from "../contexts/gamePrepLoading";
+import { roomIdContext } from "../contexts/roomId";
 
 export const GamePrep = () => {
   const { playerOneHand } = useContext(playerOneHandContext);
   const { playerTwoHand } = useContext(playerTwoHandContext);
   const { playersReady } = useContext(playersReadyContext);
   const { thisUser } = useContext(thisUserContext);
+  const { roomId } = useContext(roomIdContext);
+
   // const [selectedCard, setSelectedCard] = useState({});
   const { selectedCard, setSelectedCard } = useContext(selectedCardContext);
 
@@ -22,11 +25,11 @@ export const GamePrep = () => {
   // const [cardHighlighted, setCardHighlighted] = useState(false);
 
   const drawToPlayer = (cards) => {
-    socket.emit("drawCards", cards);
+    socket.emit("drawCards", cards, roomId);
   };
 
   const modifyHand = (newHand, player) => {
-    socket.emit("modifyHand", newHand, player);
+    socket.emit("modifyHand", newHand, player, roomId);
   };
 
   const removeCardFromHand = () => {
@@ -45,18 +48,18 @@ export const GamePrep = () => {
 
   const returnToPlayer = (card) => {
     if (thisUser === "playerOne") {
-      socket.emit("cardToPlayerOne", card);
+      socket.emit("cardToPlayerOne", card, roomId);
     } else if (thisUser === "playerTwo") {
-      socket.emit("cardToPlayerTwo", card);
+      socket.emit("cardToPlayerTwo", card, roomId);
     }
   };
 
   const playerReady = () => {
-    if (squaresArr) socket.emit("playerReady", thisUser);
+    if (squaresArr) socket.emit("playerReady", thisUser, roomId);
   };
 
   const setTriangle = () => {
-    socket.emit("setTriangle", thisUser, squaresArr);
+    socket.emit("setTriangle", thisUser, squaresArr, roomId);
   };
 
   useEffect(() => {
