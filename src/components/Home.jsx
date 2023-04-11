@@ -1,5 +1,7 @@
+import useState from "react";
 import { Link } from "react-router-dom";
 export const Home = () => {
+  const [input, setInput] = useState("");
   const randomString = Math.random().toString(36).substring(2, 12);
 
   return (
@@ -19,6 +21,18 @@ export const Home = () => {
         <button>
           <Link to={`/game/${randomString}`}>create game</Link>
         </button>
+        <section className="nickname-form">
+          <input
+            style={{ textAlign: "center" }}
+            placeholder="game id..."
+            onChange={(event) => {
+              setInput(event.target.value);
+            }}
+          ></input>
+          <button disabled={!input}>
+            <Link to={`/game/${input}`}>join game</Link>
+          </button>
+        </section>
         <p
           style={{
             textAlign: "center",
