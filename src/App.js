@@ -85,10 +85,8 @@ export default function App() {
     // socket.on("disconnect", onDisconnect);
     socket.on("disconnect", () => onDisconnect(roomId));
 
-    socket.on("addUserToLobby", (user) => {
-      setCurrentUsers((current) => {
-        return [...current, user];
-      });
+    socket.on("addUserToLobby", (roomObj) => {
+      setCurrentUsers(roomObj.players);
       setUserCount((current) => {
         return current + 1;
       });
