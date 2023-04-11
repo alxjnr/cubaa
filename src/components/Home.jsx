@@ -28,7 +28,7 @@ export const Home = () => {
             borderRadius: "5px",
           }}
         >
-          Adamas is a free online card game for two players. Players take turns
+          Cubaa is a free online card game for two players. Players take turns
           playing cards from their hands, trying to make their way up the
           opponent's pyramid. The goal is to reach the top and capture the
           opponent's last card.<br></br>
