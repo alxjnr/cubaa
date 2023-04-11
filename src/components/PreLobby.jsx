@@ -34,9 +34,9 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(window.location.href);
-  };
+  // const handleCopy = () => {
+  //   navigator.clipboard.writeText(window.location.href);
+  // };
 
   return (
     <section className="home-container">
@@ -65,7 +65,7 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
               enter lobby
             </button>
           </section>
-          <section className="nickname-form">
+          {/* <section className="nickname-form">
             <input
               type="text"
               value={window.location.href}
@@ -73,7 +73,7 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
               style={{ textAlign: "center", width: "45vw" }}
             />
             <button onClick={handleCopy}>Copy</button>
-          </section>
+          </section> */}
         </section>
       ) : (
         <section>
