@@ -6,11 +6,14 @@ import { thisUserContext } from "../contexts/thisUser";
 import { useLocation, useParams } from "react-router-dom";
 import { roomIdContext } from "../contexts/roomId";
 import { Link } from "react-router-dom";
+import { nicknameContext } from "../contexts/nickname";
 
 export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
   const { currentUsers } = useContext(currentUsersContext);
   const { thisUser, setThisUser } = useContext(thisUserContext);
   const { roomId, setRoomId } = useContext(roomIdContext);
+  const { setNickname } = useContext(nicknameContext);
+  const [copyMsg, setCopyMsg] = useState("");
 
   const [input, setInput] = useState("");
   const [signedUp, setSignedUp] = useState(false);
@@ -24,18 +27,14 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
 
   const handleSubmit = () => {
     socket.emit("addUserToLobby", input, roomId);
+    setNickname(input);
     setInput("");
     setSignedUp(true);
-
-    if (!currentUsers.length) {
-      setThisUser("playerOne");
-    } else {
-      setThisUser("playerTwo");
-    }
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(room_id);
+    setCopyMsg("id copied");
   };
 
   return (
@@ -73,6 +72,15 @@ export const PreLobby = ({ isPlayingGame, setIsPlayingGame, socket }) => {
               style={{ textAlign: "center", width: "45vw" }}
             />
             <button onClick={handleCopy}>Copy</button>
+          </section>
+          <section
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <h5>{copyMsg}</h5>
           </section>
         </section>
       ) : (

@@ -47,8 +47,8 @@ export const Home = () => {
           opponent's pyramid. The goal is to reach the top and capture the
           opponent's last card.<br></br>
           <br></br>
-          Click 'create game' to create a game, then copy the URL and send it to
-          a friend to enter the lobby.
+          Click 'create game' to create a game, then copy the ID and send it to
+          a friend to play.
         </p>
       </section>
     </section>

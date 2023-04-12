@@ -38,7 +38,9 @@ export const PlayerTwoBoardHand = () => {
                   : "",
             }}
             onClick={() => {
-              setSelectedCard(card);
+              if (thisUser === "playerTwo") {
+                setSelectedCard(card);
+              }
             }}
           />
         );

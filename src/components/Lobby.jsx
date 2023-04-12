@@ -1,18 +1,32 @@
-import { useContext, useEffect, useState } from "react";
+import { createRef, useContext, useEffect, useState } from "react";
 import { socket } from "../socket";
 import { currentUsersContext } from "../contexts/currentUsers";
 import { GamePrep } from "./GamePrep";
 import { roomIdContext } from "../contexts/roomId";
 import { Link } from "react-router-dom";
+import { thisUserContext } from "../contexts/thisUser";
+import { nicknameContext } from "../contexts/nickname";
 
 export const Lobby = ({ isPlayingGame }) => {
   const { currentUsers, setCurrentUsers } = useContext(currentUsersContext);
   const { roomId } = useContext(roomIdContext);
+  const { setThisUser } = useContext(thisUserContext);
+  const { nickname } = useContext(nicknameContext);
+  const [readyMsg, setReadyMsg] = useState("");
+  const [readyPressed, setReadyPressed] = useState(false);
 
   useEffect(() => {}, []);
 
   const startGame = () => {
-    socket.emit("isPlayingGame", roomId);
+    if (currentUsers[0] === nickname) {
+      setThisUser("playerOne");
+    } else {
+      setThisUser("playerTwo");
+    }
+    socket.emit("lobbyReady", roomId);
+    setReadyPressed(true);
+    setReadyMsg("waiting for other player...");
+    // socket.emit("isPlayingGame", roomId);
   };
 
   return (
@@ -52,9 +66,20 @@ export const Lobby = ({ isPlayingGame }) => {
                 );
               })}
             </section>
-            <button onClick={startGame} style={{ marginBottom: "25px" }}>
-              Start
+            <button
+              onClick={() => {
+                if (currentUsers.length > 1) {
+                  startGame();
+                } else {
+                  setReadyMsg("need two players to start the game");
+                }
+              }}
+              style={{ marginBottom: "25px" }}
+              disabled={readyPressed}
+            >
+              Ready
             </button>
+            <h5> {readyMsg}</h5>
           </section>
         </section>
       ) : (

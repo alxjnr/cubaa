@@ -73,7 +73,6 @@ export const PlayerOneBoardTriangle = () => {
 
     setTimeout(() => {
       if (intParsedSelected >= intParsedOpposing || aceLoss) {
-        console.log("card won");
         if (intParsedSelected > 10) {
           socket.emit("playerTwoDiscard", selectedCard, roomId);
           socket.emit("playerOneTileDiscard", tileIndex, opposingCard, roomId);
@@ -126,9 +125,7 @@ export const PlayerOneBoardTriangle = () => {
                       : "/images/back-of-card.png"
                   }
                   style={{ width: "50px" }}
-                  onClick={() => {
-                    console.log(playerOneTriangle[0]);
-                  }}
+                  onClick={() => {}}
                 />
               )}
             </section>
@@ -349,7 +346,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[9].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[9] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -388,7 +388,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[7].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[7] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -426,7 +429,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[8].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[8] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -466,7 +472,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[4].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[4] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -505,7 +514,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[5].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[5] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -544,7 +556,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[6].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[6] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -585,7 +600,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[0].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[0] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -620,7 +638,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[1].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[1] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -655,7 +676,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[2].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[2] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&
@@ -690,7 +714,10 @@ export const PlayerOneBoardTriangle = () => {
                       ? playerOneTriangle[3].image
                       : "/images/back-of-card.png"
                   }
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    // border: revealed[3] ? "2px solid red" : "none",
+                  }}
                   onClick={() => {
                     if (
                       selectedCard &&

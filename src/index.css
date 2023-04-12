@@ -73,6 +73,7 @@ button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  transition: 200ms;
 }
 
 button:hover {
@@ -84,6 +85,10 @@ button:hover {
   button {
     padding: 10px 30px;
   }
+}
+
+button:active {
+  transform: translateY(5px);
 }
 
 .nickname-form {

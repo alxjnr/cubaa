@@ -81,6 +81,7 @@ export const GamePrep = () => {
               drawToPlayer(res.data.cards);
             });
         });
+    } else {
     }
   }, []);
 
